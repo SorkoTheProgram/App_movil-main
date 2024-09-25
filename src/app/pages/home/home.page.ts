@@ -1,10 +1,5 @@
 import { Component } from '@angular/core';
-
-interface Viaje {
-  origen: string;
-  destino: string;
-  hora: string;
-}
+import { Router } from '@angular/router';  // Para la navegación entre páginas
 
 @Component({
   selector: 'app-home',
@@ -12,18 +7,16 @@ interface Viaje {
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage {
-  viajesProntos: Viaje[] = [
-    {
-      origen: 'Campus Plaza Oeste',
-      destino: 'Centro',
-      hora: '10:30 AM'
-    },
-    {
-      origen: 'Campus San Joaquín',
-      destino: 'Casa',
-      hora: '11:00 AM'
-    }
-  ];
+  
+  constructor(private router: Router) {}
 
-  constructor() {}
+  // Función para redirigir a la página de Programar Viaje
+  irAProgramar() {
+    this.router.navigate(['/programar-viaje']);  // Asegúrate de tener la ruta '/programar-viaje' configurada
+  }
+
+  // Función para redirigir a la página de Viajes Disponibles
+  verViajesDisponibles() {
+    this.router.navigate(['/viajes-disponibles']);  // Asegúrate de tener la ruta '/viajes-disponibles' configurada
+  }
 }

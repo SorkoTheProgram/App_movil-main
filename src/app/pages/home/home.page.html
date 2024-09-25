@@ -1,54 +1,53 @@
 <ion-header>
   <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button> <!-- Este botón abre el menú lateral -->
+    </ion-buttons>
     <ion-title>Inicio</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <!-- Parte superior: Programa tu viaje -->
+
+  <!-- Parte superior: Mensaje de bienvenida -->
   <ion-grid>
     <ion-row>
       <ion-col size="12">
         <ion-card>
           <ion-card-header>
-            <ion-card-title>Programa tu viaje!</ion-card-title>
+            <ion-card-title style="text-align: center;">Bienvenido a TeLlevoApp</ion-card-title>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <!-- Parte intermedia: Programa tu viaje con botón -->
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title style="text-align: center;">Programa tu viaje</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            <!-- Aquí puedes agregar un botón para programar el viaje -->
-            <ion-button expand="block" color="primary">Programar viaje</ion-button>
+            <ion-button expand="block" color="primary" (click)="irAProgramar()">Quiero programar un viaje</ion-button>
           </ion-card-content>
         </ion-card>
       </ion-col>
     </ion-row>
 
-    <!-- Separador para espacio entre secciones -->
-    <ion-row>
-      <ion-col size="12">
-        <div style="height: 10px;"></div>
-      </ion-col>
-    </ion-row>
-
-    <!-- Parte inferior: Viajes que salen ahora -->
+    <!-- Parte inferior: Necesitas movilización con botón -->
     <ion-row>
       <ion-col size="12">
         <ion-card>
           <ion-card-header>
-            <ion-card-title>Apurado? Viajes que salen ahora</ion-card-title>
+            <ion-card-title style="text-align: center;">¿Necesitas movilización?</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            <!-- Aquí se agrega el contenido dinámico con *ngFor -->
-            <ion-list>
-              <ion-item *ngFor="let viaje of viajesProntos">
-                <ion-label>
-                  <h2>{{ viaje.origen }} → {{ viaje.destino }}</h2>
-                  <p>Hora de salida: {{ viaje.hora }}</p>
-                </ion-label>
-                <ion-button fill="outline" slot="end">Unirse</ion-button>
-              </ion-item>
-            </ion-list>
+            <ion-button expand="block" color="secondary" (click)="verViajesDisponibles()">Ver viajes disponibles</ion-button>
           </ion-card-content>
         </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>
+
 </ion-content>

@@ -23,6 +23,10 @@ const routes: Routes = [
   {
     path: 'detalles-viaje-modal',
     loadChildren: () => import('./detalles-viaje-modal/detalles-viaje-modal.module').then( m => m.DetallesViajeModalPageModule)
+  },
+  {
+    path: 'viajes-disponibles',
+    loadChildren: () => import('./pages/viajes-disponibles/viajes-disponibles.module').then(m => m.ViajesDisponiblesPageModule)
   }
 ];
 
