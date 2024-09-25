@@ -1,0 +1,32 @@
+ion-list-header {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: var(--ion-color-primary); /* Usa el color principal definido en Ionic */
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  
+  ion-item {
+    --background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 10px 0;
+    padding: 10px;
+  }
+  
+  ion-button {
+    --border-radius: 20px;
+    --padding-start: 10px;
+    --padding-end: 10px;
+  }
+  
+  h2 {
+    font-size: 1.1em;
+    font-weight: bold;
+  }
+  
+  p {
+    font-size: 0.9em;
+    color: #666;
+  }
+  

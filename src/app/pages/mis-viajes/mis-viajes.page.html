@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Mis Viajes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Lista de viajes programados -->
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Viajes Programados</ion-label>
+    </ion-list-header>
+
+    <!-- Usar viajesProgramados en vez de viajes -->
+    <ion-item *ngFor="let viaje of viajesProgramados">
+      <ion-label>
+        <h2>{{viaje.origen}} → {{viaje.destino}}</h2>
+        <p>Fecha: {{viaje.fecha}}</p>
+        <p>Costo: ${{viaje.costo}}</p>
+      </ion-label>
+      <ion-button fill="outline" slot="end" (click)="verDetalles(viaje)">Ver detalles</ion-button>
+    </ion-item>
+  </ion-list>
+
+  <!-- Separador -->
+  <div style="margin: 20px 0;"></div>
+
+  <!-- Lista de viajes finalizados -->
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Viajes Finalizados</ion-label>
+    </ion-list-header>
+
+    <!-- Usar viajesFinalizados en vez de viajes -->
+    <ion-item *ngFor="let viaje of viajesFinalizados">
+      <ion-label>
+        <h2>{{viaje.origen}} → {{viaje.destino}}</h2>
+        <p>Fecha: {{viaje.fecha}}</p>
+        <p>Costo: ${{viaje.costo}}</p>
+      </ion-label>
+      <ion-button fill="outline" slot="end" (click)="verDetalles(viaje)">Ver detalles</ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>

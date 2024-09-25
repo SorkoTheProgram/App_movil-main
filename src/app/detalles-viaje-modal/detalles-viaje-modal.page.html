@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Detalles del Viaje</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h2>{{viaje.origen}} → {{viaje.destino}}</h2>
+  <p><strong>Fecha:</strong> {{viaje.fecha}}</p>
+  <p><strong>Costo:</strong> ${{viaje.costo}}</p>
+  <p><strong>Conductor:</strong> {{viaje.conductor}}</p>
+  <p><strong>Vehículo:</strong> {{viaje.vehiculo}}</p>
+</ion-content>
+
