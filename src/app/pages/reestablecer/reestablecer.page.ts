@@ -16,7 +16,7 @@ export class ReestablecerPage implements OnInit {
   }
 
   volveraHome() {
-    this.navCtrl.navigateBack('/home');
+    this.navCtrl.navigateBack('/inicio-sesion');
   }
 
   sendResetLink() {

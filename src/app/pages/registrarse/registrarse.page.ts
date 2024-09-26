@@ -23,7 +23,7 @@ export class RegistrarsePage {
   }
 
   volveraHome() {
-    this.navCtrl.navigateBack('/home'); 
+    this.navCtrl.navigateBack('/inicio-sesion'); 
   }
   
 }
