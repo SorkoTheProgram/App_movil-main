@@ -1,9 +1,9 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-buttons slot="start">
       <!-- Botón personalizado para volver al Home -->
       <ion-button (click)="volverAlHome()">
-        <ion-icon name="arrow-back-outline"></ion-icon> <!-- Icono de flecha -->
+        <ion-icon name="arrow-back-outline"></ion-icon> 
       </ion-button>
     </ion-buttons>
     <ion-title>Programar Viaje</ion-title>
@@ -45,11 +45,11 @@
 
       <!-- Campo de Fecha (selector de calendario) -->
       <ion-item>
-        <ion-label position="floating">Fecha</ion-label>
-        <ion-datetime presentation="date" displayFormat="DD/MM/YYYY" [min]="fechaMin" [max]="fechaMax" [(ngModel)]="viaje.fecha"></ion-datetime>
+        <ion-label position="stacked">Fecha</ion-label>
+        <ion-datetime style="padding: 20px;" presentation="date" displayFormat="DD/MM/YYYY" [min]="fechaMin" [max]="fechaMax" [(ngModel)]="viaje.fecha"></ion-datetime>
       </ion-item>
 
-      <ion-button expand="block" color="primary" (click)="programarViaje()">Programar</ion-button>
+      <ion-button expand="block" (click)="programarViaje()">Programar</ion-button>
     </ion-card-content>
   </ion-card>
 </ion-content>

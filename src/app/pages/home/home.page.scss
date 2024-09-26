@@ -5,6 +5,10 @@ ion-card-title {
 ion-button {
   --border-radius: 20px;
   margin-top: 10px;
+  --background: #20f7ef; /* Esto asegurará que todo el botón tenga el color deseado */
+  --background-activated: #20f7ef; /* Opcional, para cambiar el color cuando el botón es presionado */
+  --background-focused: #20f7ef; /* Opcional, para mantener el mismo color cuando el botón está enfocado */
+  --background-hover: #20f7ef; /* Opcional, para mantener el color al pasar el cursor sobre el botón */
 }
 
 ion-list {
@@ -26,4 +30,9 @@ h2 {
 p {
   font-size: 0.9em;
   color: #666;
+}
+
+ion-toolbar {
+  --background: #20f7ef; 
+  --color: rgb(0, 0, 0);
 }

@@ -27,6 +27,11 @@ ion-list-header {
   
   p {
     font-size: 0.9em;
-    color: #666;
+    color: #000000;
+  }
+  
+  ion-toolbar {
+    --background: #20f7ef; 
+    --color: rgb(0, 0, 0);
   }
   
