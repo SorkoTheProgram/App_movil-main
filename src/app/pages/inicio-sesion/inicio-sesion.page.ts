@@ -26,6 +26,10 @@ export class InicioSesionPage {
       await alert.present();
     }
   }
+  restablecerContrasena() {
+   
+    this.navCtrl.navigateForward('/restablecer');
+  }
 
   volveraHome() {
     this.navCtrl.navigateBack('/home'); 

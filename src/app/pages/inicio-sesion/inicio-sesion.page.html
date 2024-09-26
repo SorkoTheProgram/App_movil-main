@@ -24,7 +24,14 @@
     </ion-item>
 
     
+
+    
     <ion-button style="padding: 20px;" shape="round" expand="full" type="submit">Iniciar Sesión</ion-button>
+
+    <p>Olvidaste tu contraseña?</p>
+    <ion-button routerLink="/reestablecer" expand="full" color="warning" (click)="restablecerContrasena()">
+      Restablecer Contraseña
+    </ion-button>
     
 
   </form>
@@ -32,4 +39,5 @@
   <ion-button shape="round" expand="full" type="submit" color="success" routerLink="/registrarse">
     Registrarse
   </ion-button>
+  <p></p>
 </ion-content>
