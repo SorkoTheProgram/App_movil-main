@@ -1,0 +1,16 @@
+/* Ajustar el tamaño y alineación del selector de tiempo */
+.datetime-selector {
+    --min-width: 100%; /* Asegura que el selector ocupe todo el espacio disponible */
+    --max-width: 100%; /* Evita que se corte */
+    padding: 5px 0; /* Añadir algo de espacio alrededor */
+  }
+  
+  ion-grid {
+    margin-bottom: 15px; /* Añadir espacio entre los elementos del grid */
+  }
+  
+  ion-col {
+    display: flex;
+    align-items: center;
+  }
+  

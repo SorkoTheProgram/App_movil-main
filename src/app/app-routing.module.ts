@@ -27,6 +27,10 @@ const routes: Routes = [
   {
     path: 'viajes-disponibles',
     loadChildren: () => import('./pages/viajes-disponibles/viajes-disponibles.module').then(m => m.ViajesDisponiblesPageModule)
+  },
+  {
+    path: 'programar-viaje',
+    loadChildren: () => import('./pages/programar-viaje/programar-viaje.module').then( m => m.ProgramarViajePageModule)
   }
 ];
 
