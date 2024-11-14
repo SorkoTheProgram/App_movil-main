@@ -1,63 +1,30 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button (click)="volverHome()">
-        <ion-icon name="arrow-back-outline"></ion-icon> 
-      </ion-button>
-    </ion-buttons>
     <ion-title>Perfil</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <!-- Foto de perfil -->
   <div class="profile-container">
     <ion-avatar>
       <img src="assets/joncena.jpeg" alt="Foto de perfil">
     </ion-avatar>
-    <h2>{{ usuario.nombreCompleto }}</h2>
-    <p>{{ usuario.email }}</p>
+    <h2>{{ usuario?.nombre }} {{ usuario?.apellido }}</h2>
+    <p>{{ usuario?.email }}</p>
   </div>
 
-  <!-- Información del usuario -->
   <ion-list>
     <ion-item>
       <ion-label>Nombre:</ion-label>
-      <ion-text>{{ usuario.nombreCompleto }}</ion-text>
+      <ion-text>{{ usuario?.nombre }}</ion-text>
     </ion-item>
 
     <ion-item>
       <ion-label>Correo Electrónico:</ion-label>
-      <ion-text>{{ usuario.email }}</ion-text>
-    </ion-item>
-
-    <ion-item>
-      <ion-label>Teléfono:</ion-label>
-      <ion-text>{{ usuario.telefono }}</ion-text>
-    </ion-item>
-
-    <ion-item *ngIf="usuario.vehiculo">
-      <ion-label>Vehículo:</ion-label>
-      <ion-text>{{ usuario.vehiculo.modelo }} - {{ usuario.vehiculo.placa }}</ion-text>
-    </ion-item>
-
-    <ion-item *ngIf="usuario.vehiculo">
-      <ion-label>Espacios Disponibles:</ion-label>
-      <ion-text>{{ usuario.vehiculo.espaciosDisponibles }}</ion-text>
-    </ion-item>
-
-    <ion-item>
-      <ion-label>Historial de Viajes:</ion-label>
-      <ion-text>{{ usuario.historialViajes }} viajes realizados</ion-text>
-    </ion-item>
-
-    <ion-item *ngIf="usuario.calificacion">
-      <ion-label>Calificación:</ion-label>
-      <ion-text>{{ usuario.calificacion }}/5</ion-text>
+      <ion-text>{{ usuario?.email }}</ion-text>
     </ion-item>
   </ion-list>
 
-  <!-- Botones de acción -->
-  <ion-button routerLink ="/editar-perfil" expand="full" (click)="editarPerfil()">Editar Perfil</ion-button>
-  <ion-button routerLink ="/inicio-sesion" expand="full" color="danger" (click)="cerrarSesion()">Cerrar Sesión</ion-button>
+  <ion-button routerLink="/editar-perfil" expand="full">Editar Perfil</ion-button>
+  <ion-button routerLink="/inicio-sesion" expand="full" color="danger">Cerrar Sesión</ion-button>
 </ion-content>

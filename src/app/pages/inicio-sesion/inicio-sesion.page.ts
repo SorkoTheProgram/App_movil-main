@@ -33,7 +33,7 @@ export class InicioSesionPage implements OnInit {
       // Intento de inicio de sesión
       const user = await this.authSvc.iniciarSesion(formValues.email!, formValues.password!);
       if (user) {
-        this.utils.navegarAlInicio('/inicio');
+        this.utils.navegarAlInicio('/home');
       }
     } catch (error) {
       // Manejo de errores
