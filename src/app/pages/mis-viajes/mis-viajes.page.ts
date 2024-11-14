@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
 import { DetallesViajeModalPage } from '../../detalles-viaje-modal/detalles-viaje-modal.page'; // Importa tu modal
+
 
 // Definir la interfaz para un viaje
 interface Viaje {
@@ -57,8 +58,10 @@ export class MisViajesPage {
       vehiculo: 'Ford Focus'
     },
   ];
+ 
+  
 
-  constructor(private modalController: ModalController) {}
+  constructor(private modalController: ModalController, private navController: NavController) {}
 
   // Función para abrir el modal de detalles
   async verDetalles(viaje: Viaje) {
@@ -70,5 +73,9 @@ export class MisViajesPage {
     });
 
     return await modal.present();
+  }
+
+  volveraHome() {
+    this.navController.navigateBack('/home'); 
   }
 }

@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="volveraHome()">
+        <ion-icon name="arrow-back-outline"></ion-icon> 
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Registrarse</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form (ngSubmit)="onSubmit()">
+    <!-- Campo de Nombre -->
+    <ion-item>
+      <ion-label position="floating">Nombre</ion-label>
+      <ion-input [(ngModel)]="nombre" name="nombre" type="text" required></ion-input>
+    </ion-item>
+
+    <!-- Campo de Apellido -->
+    <ion-item>
+      <ion-label position="floating">Apellido</ion-label>
+      <ion-input [(ngModel)]="apellido" name="apellido" type="text" required></ion-input>
+    </ion-item>
+
+    <!-- Campo de Correo Electrónico -->
+    <ion-item>
+      <ion-label position="floating">Correo Electrónico</ion-label>
+      <ion-input [(ngModel)]="email" name="email" type="email" required></ion-input>
+    </ion-item>
+
+    <!-- Campo de Fecha de Nacimiento -->
+    <ion-item>
+      <ion-label position="floating" style="padding: 20px;">Fecha Nacimiento</ion-label>
+      <ion-datetime presentation="date" displayFormat="DD/MM/YYYY"></ion-datetime>
+    </ion-item>
+
+    <!-- Botón de Registro -->
+    <ion-button routerLink ="/home" expand="full" type="submit">Registrarse</ion-button>
+  </form>
+</ion-content>

@@ -7,12 +7,12 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./detalles-viaje-modal.page.scss'],
 })
 export class DetallesViajeModalPage {
-  // Recibir los datos del viaje
+  
   @Input() viaje: any;
 
   constructor(private modalController: ModalController) {}
 
   dismissModal() {
-    this.modalController.dismiss(); // Cerrar el modal
+    this.modalController.dismiss(); 
   }
 }
