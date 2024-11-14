@@ -1,48 +1,28 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="volveraHome()">
-        <ion-icon name="arrow-back-outline"></ion-icon> 
+      <ion-button (click)="volver()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Editar Perfil</ion-title>
+    <ion-title>Cambiar Contraseña</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form (ngSubmit)="onSubmit()">
-    
+  <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
     <ion-item>
-      <ion-label position="floating">Nombre</ion-label>
-      <ion-input [(ngModel)]="nombre" name="nombre" type="text" required></ion-input>
+      <ion-label position="floating">Contraseña Actual</ion-label>
+      <ion-input type="password" formControlName="currentPassword"></ion-input>
     </ion-item>
 
-    
     <ion-item>
-      <ion-label position="floating">Apellido</ion-label>
-      <ion-input [(ngModel)]="apellido" name="apellido" type="text" required></ion-input>
+      <ion-label position="floating">Nueva Contraseña</ion-label>
+      <ion-input type="password" formControlName="newPassword"></ion-input>
     </ion-item>
 
-    
-    <ion-item>
-      <ion-label position="floating">Correo Electrónico</ion-label>
-      <ion-input [(ngModel)]="email" name="email" type="email" required></ion-input>
-    </ion-item>
-
-    
-    <ion-item>
-      <ion-label position="floating">Teléfono</ion-label>
-      <ion-input [(ngModel)]="telefono" name="telefono" type="tel" required></ion-input>
-    </ion-item>
-
-    
-    <ion-item>
-      <ion-label position="floating">Dirección</ion-label>
-      <ion-input [(ngModel)]="direccion" name="direccion" type="text" required></ion-input>
-    </ion-item>
-
-    
-    <ion-button expand="full" type="submit" (click)="guardarCambios()">Guardar Cambios</ion-button>
-      
+    <ion-button expand="full" type="submit" [disabled]="passwordForm.invalid">
+      Actualizar Contraseña
+    </ion-button>
   </form>
 </ion-content>

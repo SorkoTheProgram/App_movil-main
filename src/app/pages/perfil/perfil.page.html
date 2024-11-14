@@ -18,13 +18,15 @@
       <ion-label>Nombre:</ion-label>
       <ion-text>{{ usuario?.nombre }}</ion-text>
     </ion-item>
-
+    <ion-item>
+      <ion-label>Apellido:</ion-label>
+      <ion-text>{{ usuario?.apellido }}</ion-text>
+    </ion-item>
     <ion-item>
       <ion-label>Correo Electrónico:</ion-label>
       <ion-text>{{ usuario?.email }}</ion-text>
     </ion-item>
   </ion-list>
 
-  <ion-button routerLink="/editar-perfil" expand="full">Editar Perfil</ion-button>
-  <ion-button routerLink="/inicio-sesion" expand="full" color="danger">Cerrar Sesión</ion-button>
+  <ion-button routerLink="/editar-perfil" expand="full">Cambiar Contraseña</ion-button>
 </ion-content>

@@ -58,7 +58,25 @@ export class AuthService {
       throw error;
     }
   }
-
+  async changePassword(newPassword: string, currentPassword: string) {
+    try {
+      const user = await this.afAuth.currentUser;
+      if (!user) {
+        throw new Error('Usuario no autenticado');
+      }
+  
+      // Reautenticar al usuario antes de actualizar la contraseña
+      const credential = await this.afAuth.signInWithEmailAndPassword(user.email!, currentPassword);
+      if (credential) {
+        await user.updatePassword(newPassword);
+        console.log('Contraseña actualizada con éxito');
+      }
+    } catch (error) {
+      console.error('Error al cambiar la contraseña:', error);
+      throw error;
+    }
+  }
+  
   async obtenerDocumento(ruta: string): Promise<Usuario | null> {
     try {
       const docSnap = await getDoc(doc(this.firestore.firestore, ruta));
