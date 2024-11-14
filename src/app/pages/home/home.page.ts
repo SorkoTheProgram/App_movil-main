@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Auth } from '@angular/fire/auth';
-import { Firestore } from '@angular/fire/firestore';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Component({
   selector: 'app-home',
@@ -12,16 +12,30 @@ export class HomePage implements OnInit {
 
   constructor(
     private router: Router,
-    //private auth: Auth, // Prueba con esta línea primero
-    //private firestore: Firestore // Prueba con esta línea después
+    private afAuth: AngularFireAuth, // Inyección de AngularFireAuth
+    private firestore: AngularFirestore // Inyección de AngularFirestore
   ) {}
 
-  ngOnInit() {
-    // Prueba de inicialización de servicios
+  async ngOnInit() {
+    // Verificar si hay un usuario autenticado
+    this.afAuth.authState.subscribe(user => {
+      if (user) {
+        console.log('Usuario autenticado:', user.email);
+      } else {
+        console.log('No hay un usuario autenticado.');
+      }
+    });
+
+    // Probar la conexión a Firestore
     try {
-      console.log('Auth y Firestore inicializados correctamente');
+      const snapshot = await this.firestore.collection('usuarios').get().toPromise();
+      if (!snapshot.empty) {
+        console.log('Conexión a Firestore exitosa. Documentos obtenidos:', snapshot.docs.map(doc => doc.data()));
+      } else {
+        console.log('Conexión a Firestore exitosa, pero no se encontraron documentos en la colección "usuarios".');
+      }
     } catch (error) {
-      console.error('Error al inicializar los servicios de Firebase:', error);
+      console.error('Error al conectar con Firestore:', error);
     }
   }
 
