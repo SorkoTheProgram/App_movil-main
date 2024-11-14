@@ -1,7 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { UtilsService } from '../../services/utils.service';
-import { Usuario } from 'src/app/models/models';
+import { ViajesService } from '../../services/viajes.service';
+import { Usuario, Viaje } from 'src/app/models/models';
 
 @Component({
   selector: 'app-perfil',
@@ -9,13 +10,14 @@ import { Usuario } from 'src/app/models/models';
   styleUrls: ['./perfil.page.scss'],
 })
 export class PerfilPage implements OnInit {
-
   usuario: Usuario | null = null;
+  viajes: Viaje[] = [];
 
   private authSvc = inject(AuthService);
   private utilsSvc = inject(UtilsService);
+  private viajesSvc = inject(ViajesService);
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
     this.cargarDatosUsuario();
@@ -29,11 +31,25 @@ export class PerfilPage implements OnInit {
         if (usuarioData) {
           this.usuario = usuarioData;
           this.utilsSvc.guardarEnLocalStorage('usuario', usuarioData);
+          this.cargarHistorialViajes(usuarioData.email);
         }
       } catch (error) {
         console.error('Error al obtener los datos del usuario:', error);
       }
+    } else {
+      this.cargarHistorialViajes(this.usuario.email);
     }
+  }
+
+  cargarHistorialViajes(usuarioId: string) {
+    this.viajesSvc.getHistorialViajes(usuarioId).subscribe(
+      (data: Viaje[]) => {
+        this.viajes = data;
+      },
+      (error) => {
+        console.error('Error al cargar el historial de viajes:', error);
+      }
+    );
   }
 
   editarPerfil() {
