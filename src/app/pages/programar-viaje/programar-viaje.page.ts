@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
+import { Viaje } from 'src/app/models/models';
 
 @Component({
   selector: 'app-programar-viaje',
@@ -7,35 +10,66 @@ import { Router } from '@angular/router';
   styleUrls: ['./programar-viaje.page.scss'],
 })
 export class ProgramarViajePage {
-  viaje = {
-    monto: null,
-    capacidad: null,
-    hora: '',
-    fecha: ''
-  };
+  destino: string = '';
+  comunaViaje: string = '';
+  fecha: Date = new Date();
+  precio: number = 0;
+  asientos: number = 0;
+  modelo: string = '';
+  patente: string = '';
+  conductorId: string = '';
 
-  // Propiedades para definir el rango de fechas permitido
-  fechaMin: string;
-  fechaMax: string;
+  constructor(
+    private firestore: AngularFirestore,
+    private router: Router,
+    private afAuth: AngularFireAuth
+  ) {}
 
-  constructor(private router: Router) {
-    // Calculamos la fecha mínima (hoy) y la fecha máxima (una semana desde hoy)
-    const hoy = new Date();
-    const maxDate = new Date();
-    maxDate.setDate(hoy.getDate() + 7); // Sumar 7 días
-
-    // Convertimos las fechas a formato ISO para que ion-datetime las pueda utilizar
-    this.fechaMin = hoy.toISOString().split('T')[0];  // Solo la parte de la fecha
-    this.fechaMax = maxDate.toISOString().split('T')[0];
+  ngOnInit() {
+    this.afAuth.onAuthStateChanged(user => {
+      if (user) {
+        this.conductorId = user.uid; // Obtener el ID del conductor desde la autenticación
+      }
+    });
   }
+
+  // Método para programar el viaje
+  programarViaje() {
+    const viaje: Viaje = {
+      destino: this.destino,
+      comunaViaje: this.comunaViaje,
+      fecha: this.fecha,
+      precio: this.precio,
+      asientos: this.asientos,
+      conductor: this.conductorId, // El ID del conductor se guarda aquí
+      modelo: this.modelo,
+      patente: this.patente,
+      pasajeros: [], // Inicialmente no hay pasajeros
+      estado: 'disponible' // El estado del viaje es 'disponible' cuando se programa
+    };
+
+    // Guardar el viaje en Firestore
+    this.firestore.collection('viajes').add(viaje).then(() => {
+      console.log('Viaje programado exitosamente!');
+      this.router.navigate(['/home']);  // Redirigir a la página de inicio o la vista de viajes
+    }).catch((error) => {
+      console.error('Error al programar el viaje:', error);
+    });
+  }
+
+  // Verificar si el formulario es válido
+  formValid() {
+    return this.destino && this.comunaViaje && this.precio && this.asientos && this.modelo && this.patente;
+  }
+
 
   volverAlHome() {
     this.router.navigate(['/home']);  // Navega a la página Home
   }
-
-  programarViaje() {
-    console.log('Viaje programado:', this.viaje);
-    alert('Viaje programado con éxito');
-    this.router.navigate(['/home']);  // Después de programar el viaje, vuelve al Home
-  }
 }
+
+
+
+
+
+

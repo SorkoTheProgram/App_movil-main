@@ -1,16 +1,16 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <!-- Botón para volver atrás -->
-      <ion-back-button defaultHref="/home"></ion-back-button> 
+      <ion-button (click)="volverHome()">
+        <ion-icon name="arrow-back-outline"></ion-icon> 
+      </ion-button>
     </ion-buttons>
-    <ion-title>Viajes Disponibles</ion-title>
+    <ion-title>Perfil</ion-title>
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content class="ion-padding" *ngIf="viaje">
-  <!-- Información del viaje -->
+  <!-- Información del viaje en curso -->
   <ion-card>
     <ion-card-header>
       <ion-card-title>{{ viaje.destino }}</ion-card-title>
@@ -22,13 +22,15 @@
       <p><strong>Patente:</strong> {{ viaje.patente }}</p>
       <p><strong>Precio:</strong> ${{ viaje.precio }}</p>
       <p><strong>Asientos Disponibles:</strong> {{ viaje.asientos }}</p>
+      <p><strong>Pasajeros:</strong></p>
+        <ul>
+          <li *ngFor="let pasajero of viaje.pasajeros">{{ pasajero }}</li>
+        </ul>
+      
     </ion-card-content>
   </ion-card>
 
-  <!-- Botón para tomar el viaje -->
-  <ion-button expand="full" color="success" (click)="tomarViaje()">
-    Tomar este viaje
-  </ion-button>
+  
 </ion-content>
 
 <ion-loading *ngIf="!viaje" message="Cargando detalles del viaje..."></ion-loading>

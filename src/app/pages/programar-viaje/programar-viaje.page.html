@@ -11,45 +11,42 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title style="text-align: center;">Programar un Viaje</ion-card-title>
-    </ion-card-header>
+  <form (ngSubmit)="programarViaje()">
+    <ion-item>
+      <ion-label position="floating">Destino</ion-label>
+      <ion-input [(ngModel)]="destino" name="destino" required></ion-input>
+    </ion-item>
 
-    <ion-card-content>
-      <!-- Formulario para programar un viaje -->
+    <ion-item>
+      <ion-label position="floating">Comuna de Viaje</ion-label>
+      <ion-input [(ngModel)]="comunaViaje" name="comunaViaje" required></ion-input>
+    </ion-item>
 
-      <!-- Campo de Monto -->
-      <ion-item>
-        <ion-label position="floating">Monto</ion-label>
-        <ion-input type="number" [(ngModel)]="viaje.monto"></ion-input>
-      </ion-item>
+    <ion-item>
+      <ion-label position="floating">Fecha</ion-label>
+      <ion-datetime [(ngModel)]="fecha" name="fecha" required></ion-datetime>
+    </ion-item>
 
-      <!-- Campo de Capacidad -->
-      <ion-item>
-        <ion-label position="floating">Capacidad</ion-label>
-        <ion-input type="number" [(ngModel)]="viaje.capacidad"></ion-input>
-      </ion-item>
+    <ion-item>
+      <ion-label position="floating">Precio por Persona</ion-label>
+      <ion-input [(ngModel)]="precio" name="precio" type="number" required></ion-input>
+    </ion-item>
 
-      <!-- Campo de Hora (alineado a la derecha con el selector) -->
-      <ion-grid>
-        <ion-row>
-          <ion-col size="4">
-            <ion-label>Hora</ion-label>
-          </ion-col>
-          <ion-col size="8">
-            <ion-datetime presentation="time" displayFormat="HH:mm" [(ngModel)]="viaje.hora" class="datetime-selector"></ion-datetime>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+    <ion-item>
+      <ion-label position="floating">Asientos Disponibles</ion-label>
+      <ion-input [(ngModel)]="asientos" name="asientos" type="number" required></ion-input>
+    </ion-item>
 
-      <!-- Campo de Fecha (selector de calendario) -->
-      <ion-item>
-        <ion-label position="stacked">Fecha</ion-label>
-        <ion-datetime style="padding: 20px;" presentation="date" displayFormat="DD/MM/YYYY" [min]="fechaMin" [max]="fechaMax" [(ngModel)]="viaje.fecha"></ion-datetime>
-      </ion-item>
+    <ion-item>
+      <ion-label position="floating">Modelo del Auto</ion-label>
+      <ion-input [(ngModel)]="modelo" name="modelo" required></ion-input>
+    </ion-item>
 
-      <ion-button expand="block" (click)="programarViaje()">Programar</ion-button>
-    </ion-card-content>
-  </ion-card>
+    <ion-item>
+      <ion-label position="floating">Patente del Auto</ion-label>
+      <ion-input [(ngModel)]="patente" name="patente" required></ion-input>
+    </ion-item>
+
+    <ion-button expand="full" type="submit" [disabled]="!formValid()">Programar Viaje</ion-button>
+  </form>
 </ion-content>

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { ViajeEnCursoPage } from './pages/viaje-en-curso/viaje-en-curso.page';
 
 const routes: Routes = [
   {
@@ -15,10 +16,7 @@ const routes: Routes = [
     path: 'perfil',
     loadChildren: () => import('./pages/perfil/perfil.module').then(m => m.PerfilPageModule)
   },
-  {
-    path: 'mis-viajes',
-    loadChildren: () => import('./pages/mis-viajes/mis-viajes.module').then(m => m.MisViajesPageModule)
-  },
+  
   {
     path: 'detalles-viaje-modal',
     loadChildren: () => import('./detalles-viaje-modal/detalles-viaje-modal.module').then(m => m.DetallesViajeModalPageModule)
@@ -47,6 +45,18 @@ const routes: Routes = [
     path: 'reestablecer',
     loadChildren: () => import('./pages/reestablecer/reestablecer.module').then(m => m.ReestablecerPageModule)
   },
+  {
+    path: 'viaje-en-curso/:id',  // Ruta con parámetro de ID
+    loadChildren: () => import('./pages/viaje-en-curso/viaje-en-curso.module').then(m => m.ViajeEnCursoPageModule)
+  }, 
+
+  /* {
+    path: 'viaje-en-curso/:id',  // Ruta con parámetro de ID
+    component: ViajeEnCursoPage
+  }, */
+
+  
+
 ];
 
 @NgModule({
