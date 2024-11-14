@@ -1,41 +1,62 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Viaje } from 'src/app/models/models';
 
-interface Viaje {
-  origen: string;
-  destino: string;
-  hora: string;
-  capacidadRestante: number;
-}
+
 
 @Component({
   selector: 'app-viajes-disponibles',
   templateUrl: './viajes-disponibles.page.html',
   styleUrls: ['./viajes-disponibles.page.scss'],
 })
-export class ViajesDisponiblesPage {
-  viajesDisponibles: Viaje[] = [
-    {
-      origen: 'Campus Plaza Oeste',
-      destino: 'Centro',
-      hora: '10:30 AM',
-      capacidadRestante: 2
-    },
-    {
-      origen: 'Campus San Joaquín',
-      destino: 'Casa',
-      hora: '11:00 AM',
-      capacidadRestante: 1
-    }
-  ];
+export class ViajesDisponiblesPage implements OnInit {
+  viajeId: string = '';
+  viaje: Viaje | null = null;
+  pasajeroId: string = 'user-id'; 
 
-  constructor() {}
+  constructor(
+    private route: ActivatedRoute,
+    private firestore: AngularFirestore,
+    private router: Router
+  ) {}
 
-  unirseAlViaje(viaje: Viaje) {
-    if (viaje.capacidadRestante > 0) {
-      viaje.capacidadRestante -= 1;
-      alert('Te has unido al viaje.');
-    } else {
-      alert('Este viaje no tiene más capacidad disponible.');
+  ngOnInit() {
+    this.viajeId = this.route.snapshot.paramMap.get('id')!;
+    this.cargarViaje();
+  }
+
+  // Cargar los detalles del viaje
+  cargarViaje() {
+    this.firestore.collection('viajes').doc(this.viajeId).get().subscribe(doc => {
+      if (doc.exists) {
+        this.viaje = doc.data() as Viaje;
+      } else {
+        console.log('Viaje no encontrado');
+      }
+    });
+  }
+
+  // Función para que el pasajero tome el viaje
+  tomarViaje() {
+    if (this.viaje) {
+      const pasajeros = this.viaje.pasajeros;
+
+      // Verificar si el pasajero ya está en la lista de pasajeros
+      if (!pasajeros.includes(this.pasajeroId)) {
+        pasajeros.push(this.pasajeroId);  // Agregar al pasajero a la lista
+        this.firestore.collection('viajes').doc(this.viajeId).update({
+          pasajeros: pasajeros,  // Actualizar la lista de pasajeros
+          estado: 'pendiente'     // Marcar el viaje como pendiente
+        }).then(() => {
+          console.log('Viaje tomado con éxito');
+          this.router.navigate(['/viaje-en-curso']);  // Redirigir a la página de inicio o donde sea necesario
+        }).catch(error => {
+          console.error('Error al tomar el viaje: ', error);
+        });
+      } else {
+        console.log('Ya estás en la lista de pasajeros');
+      }
     }
   }
 }

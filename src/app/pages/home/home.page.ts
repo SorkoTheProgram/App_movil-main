@@ -39,13 +39,13 @@ export class HomePage implements OnInit {
     }
   }
 
-  // Función para redirigir a la página de Programar Viaje
-  irAProgramar() {
-    this.router.navigate(['/programar-viaje']);
+  
+
+  irAPasajero() {
+    this.router.navigate(['/viajes-disponibles']); 
   }
 
-  // Función para redirigir a la página de Viajes Disponibles
-  verViajesDisponibles() {
-    this.router.navigate(['/viajes-disponibles']);
+  irAConductor(){
+    this.router.navigate(['/programar-viaje']);
   }
 }
