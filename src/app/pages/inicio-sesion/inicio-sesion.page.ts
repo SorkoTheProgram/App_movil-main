@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, AlertController, MenuController } from '@ionic/angular';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
+import { UtilsService } from '../../services/utils.service';
 
 @Component({
   selector: 'app-inicio-sesion',
@@ -7,41 +9,43 @@ import { NavController, AlertController, MenuController } from '@ionic/angular';
   styleUrls: ['./inicio-sesion.page.scss'],
 })
 export class InicioSesionPage implements OnInit {
-  usuario: string = '';
-  password: string = '';
-
+  // Constructor con inyección de servicios
   constructor(
-    private navCtrl: NavController,
-    private alertController: AlertController,
-    private menuController: MenuController // Importamos MenuController
+    private utils: UtilsService,
+    private authSvc: AuthService
   ) {}
 
-  ngOnInit() {
-    this.menuController.enable(false); // Deshabilitar el menú al iniciar
-  }
+  // Formulario de acceso con validaciones
+  formAcceso = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+  });
 
-  ionViewWillLeave() {
-    this.menuController.enable(true); // Habilitar el menú al salir de esta página
-  }
+  ngOnInit() {}
 
-  async login() {
-    if (this.usuario === 'admin' && this.password === '123456') {
-      this.navCtrl.navigateForward('/home');
-    } else {
-      const alert = await this.alertController.create({
-        header: 'Error',
-        message: 'Usuario o contraseña incorrectos',
-        buttons: ['OK']
+  // Método para iniciar sesión
+  async acceder() {
+    const formValues = this.formAcceso.value;
+    const loading = await this.utils.presentarCargando('Verificando...');
+    loading.present();
+
+    try {
+      // Intento de inicio de sesión
+      const user = await this.authSvc.iniciarSesion(formValues.email!, formValues.password!);
+      if (user) {
+        this.utils.navegarAlInicio('/inicio');
+      }
+    } catch (error) {
+      // Manejo de errores
+      this.utils.mostrarToast({
+        icono: 'alert-circle',
+        mensaje: 'Error: usuario o contraseña incorrectos.',
+        color: 'danger',
+        duracion: 3000
       });
-      await alert.present();
+    } finally {
+      // Cierre del loading
+      loading.dismiss();
     }
-  }
-
-  restablecerContrasena() {
-    this.navCtrl.navigateForward('/reestablecer');
-  }
-
-  volveraHome() {
-    this.navCtrl.navigateBack('/home'); 
   }
 }

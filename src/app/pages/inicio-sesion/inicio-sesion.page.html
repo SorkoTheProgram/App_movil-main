@@ -1,40 +1,35 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-    </ion-buttons>
-    <ion-title>Iniciar Sesión</ion-title>
+    <ion-title>Acceso a tu Cuenta</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form (ngSubmit)="login()">
-   
-    <ion-item>
-      <ion-label position="floating">Usuario</ion-label>
-      <ion-input [(ngModel)]="usuario" name="usuario" type="text" required></ion-input>
-    </ion-item>
-
-    
-    <ion-item>
-      <ion-label position="floating">Contraseña</ion-label>
-      <ion-input [(ngModel)]="password" name="password" type="password" required></ion-input>
-    </ion-item>
-
-    
-
-    
-    <ion-button style="padding: 20px;" shape="round" expand="full" type="submit">Iniciar Sesión</ion-button>
-
-    <p>Olvidaste tu contraseña?</p>
-    <ion-button routerLink="/reestablecer" expand="full" color="warning" (click)="restablecerContrasena()">
-      Restablecer Contraseña
-    </ion-button>
-    
-
-  </form>
-  <P>¿No tienes una cuenta? Registrate aquí</P>
-  <ion-button shape="round" expand="full" type="submit" color="success" routerLink="/registrarse">
-    Registrarse
-  </ion-button>
-  <p></p>
+  <ion-grid>
+    <ion-row>
+      <ion-col sizeMd="6" offsetMd="3">
+        <form [formGroup]="formAcceso" (ngSubmit)="acceder()">
+          <ion-item>
+            <ion-label position="floating">Correo</ion-label>
+            <ion-input type="email" formControlName="email" placeholder="Ingresa tu correo"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Contraseña</ion-label>
+            <ion-input type="password" formControlName="password" placeholder="Ingresa tu contraseña"></ion-input>
+          </ion-item>
+          <ion-button expand="block" type="submit" [disabled]="formAcceso.invalid">Entrar</ion-button>
+        </form>
+        <div class="ion-text-center">
+          <a routerLink="/recuperar-clave" routerDirection="forward" style="text-decoration: none; display: block; margin-top: 10px;">
+            ¿Has olvidado tu contraseña?
+          </a>
+        </div>
+        <ion-nav-link routerLink="/registrarse" routerDirection="forward">
+          <ion-button color="secondary" expand="block" style="margin-top: 10px;">
+            Registrarse
+          </ion-button>
+        </ion-nav-link>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
