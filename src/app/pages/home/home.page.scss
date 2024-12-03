@@ -1,38 +1,70 @@
+/* Definir la fuente por defecto para todo el contenido */
+body {
+  font-family: 'TT Firs Text', sans-serif;
+}
+
 ion-card-title {
   text-align: center;
+  font-family: 'TT Firs Neue', sans-serif; /* Fuente para los títulos */
+  font-size: 1.6em;
+  font-weight: bold;
+  color: #2c3e50; /* Gris oscuro */
+}
+
+ion-card {
+  --background: #ffffff;
+  --border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 ion-button {
-  --border-radius: 20px;
-  margin-top: 10px;
-  --background: #20f7ef; /* Esto asegurará que todo el botón tenga el color deseado */
-  --background-activated: #20f7ef; /* Opcional, para cambiar el color cuando el botón es presionado */
-  --background-focused: #20f7ef; /* Opcional, para mantener el mismo color cuando el botón está enfocado */
-  --background-hover: #20f7ef; /* Opcional, para mantener el color al pasar el cursor sobre el botón */
+  --border-radius: 25px;
+  --background: #1a5276; /* Azul serio */
+  --background-activated: #154360; /* Azul más oscuro */
+  --background-focused: #154360; 
+  --background-hover: #154360;
+  padding: 15px;
+  margin-top: 20px;
+  font-size: 1.2em;
+  font-family: 'TT Firs Text', sans-serif; /* Usar TT Firs Text para el texto del botón */
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-ion-list {
-  margin-top: 10px;
-}
-
-ion-item {
-  --background: #f0f0f0;
-  border-radius: 10px;
-  margin: 10px 0;
-  padding: 10px;
-}
-
-h2 {
-  font-size: 1.1em;
+button h2 {
+  font-size: 1.2em;
   font-weight: bold;
-}
-
-p {
-  font-size: 0.9em;
-  color: #666;
+  color: #fff;
 }
 
 ion-toolbar {
-  --background: #20f7ef; 
-  --color: rgb(0, 0, 0);
+  --background: #1a5276; /* Azul serio en la barra de herramientas */
+  --color: #fff; /* Blanco para los textos */
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.welcome-card {
+  background: #f4f4f4; /* Fondo suave */
+  margin-top: 20px;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+/* Estilos para el contenedor de la imagen */
+.image-container {
+  text-align: center;
+  margin-top: 20px; /* Espacio por encima de la imagen */
+  padding: 0 15px; /* Espacio a los lados */
+}
+
+.car-image {
+  width: 100%; /* Asegura que la imagen ocupe el ancho completo del contenedor */
+  max-width: 400px; /* Limita el tamaño máximo para evitar que la imagen se estire demasiado */
+  border-radius: 10px; /* Bordes redondeados si deseas darle un estilo más suave */
+  object-fit: cover; /* Asegura que la imagen se recorte adecuadamente sin distorsionar su relación de aspecto */
 }
