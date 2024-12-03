@@ -9,26 +9,17 @@
 </ion-header>
 
 
-<ion-content class="ion-padding" *ngIf="viaje">
-  <!-- Información del viaje -->
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>{{ viaje.destino }}</ion-card-title>
-      <ion-card-subtitle>{{ viaje.comunaViaje }}</ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content>
-      <p><strong>Conductor:</strong> {{ viaje.conductor }}</p>
-      <p><strong>Modelo del Auto:</strong> {{ viaje.modelo }}</p>
-      <p><strong>Patente:</strong> {{ viaje.patente }}</p>
-      <p><strong>Precio:</strong> ${{ viaje.precio }}</p>
-      <p><strong>Asientos Disponibles:</strong> {{ viaje.asientos }}</p>
-    </ion-card-content>
-  </ion-card>
-
-  <!-- Botón para tomar el viaje -->
-  <ion-button expand="full" color="success" (click)="tomarViaje()">
-    Tomar este viaje
-  </ion-button>
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item *ngFor="let viaje of viajes">
+      <ion-label>
+        <h2>{{ viaje.destino }}</h2>
+        <p>{{ viaje.comunaViaje }} - {{ viaje.fecha | date }}</p>
+        <p>Precio: ${{ viaje.precio }}</p>
+        <ion-button (click)="solicitarViaje(viaje)">Solicitar Viaje</ion-button>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
 
-<ion-loading *ngIf="!viaje" message="Cargando detalles del viaje..."></ion-loading>
+<ion-loading *ngIf="!viajes" message="Cargando detalles del viaje..."></ion-loading>

@@ -9,7 +9,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'inicio-sesion',  // Cambia aquí para redirigir a inicio-sesion
+    redirectTo: 'inicio-sesion',  
     pathMatch: 'full'
   },
   {
@@ -48,7 +48,11 @@ const routes: Routes = [
   {
     path: 'viaje-en-curso/:id',  // Ruta con parámetro de ID
     loadChildren: () => import('./pages/viaje-en-curso/viaje-en-curso.module').then(m => m.ViajeEnCursoPageModule)
-  }, 
+  },   {
+    path: 'mis-viajes',
+    loadChildren: () => import('./pages/mis-viajes/mis-viajes.module').then( m => m.MisViajesPageModule)
+  },
+
 
   /* {
     path: 'viaje-en-curso/:id',  // Ruta con parámetro de ID

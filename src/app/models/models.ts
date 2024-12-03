@@ -8,7 +8,7 @@ export interface Viaje {
     id?: string;
     destino: string;
     comunaViaje: string;
-    fecha: Date;
+    fecha: string;
     precio: number;
     asientos: number;
     conductor: string;

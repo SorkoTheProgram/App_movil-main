@@ -12,7 +12,7 @@ import { Viaje } from 'src/app/models/models';
 export class ProgramarViajePage {
   destino: string = '';
   comunaViaje: string = '';
-  fecha: Date = new Date();
+  fecha: string;
   precio: number = 0;
   asientos: number = 0;
   modelo: string = '';
@@ -51,7 +51,7 @@ export class ProgramarViajePage {
     // Guardar el viaje en Firestore
     this.firestore.collection('viajes').add(viaje).then(() => {
       console.log('Viaje programado exitosamente!');
-      this.router.navigate(['/home']);  // Redirigir a la página de inicio o la vista de viajes
+      this.router.navigate(['/home']);  // Redirigir a la página de inicio 
     }).catch((error) => {
       console.error('Error al programar el viaje:', error);
     });
