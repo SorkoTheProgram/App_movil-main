@@ -3,6 +3,8 @@ import { AuthService } from '../../services/auth.service';
 import { UtilsService } from '../../services/utils.service';
 import { ViajesService } from '../../services/viajes.service';
 import { Usuario, Viaje } from 'src/app/models/models';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-perfil',
@@ -12,12 +14,12 @@ import { Usuario, Viaje } from 'src/app/models/models';
 export class PerfilPage implements OnInit {
   usuario: Usuario | null = null;
   viajes: Viaje[] = [];
-
+  
   private authSvc = inject(AuthService);
   private utilsSvc = inject(UtilsService);
   private viajesSvc = inject(ViajesService);
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit() {
     this.cargarDatosUsuario();
@@ -58,5 +60,8 @@ export class PerfilPage implements OnInit {
 
   cerrarSesion() {
     this.authSvc.cerrarSesion();
+  }
+  volverAlHome() {
+    this.router.navigate(['/home']);  // Usa el router para navegar
   }
 }
