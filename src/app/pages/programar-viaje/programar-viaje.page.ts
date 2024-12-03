@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
@@ -9,67 +10,64 @@ import { Viaje } from 'src/app/models/models';
   templateUrl: './programar-viaje.page.html',
   styleUrls: ['./programar-viaje.page.scss'],
 })
-export class ProgramarViajePage {
-  destino: string = '';
-  comunaViaje: string = '';
-  fecha: Date = new Date();
-  precio: number = 0;
-  asientos: number = 0;
-  modelo: string = '';
-  patente: string = '';
+export class ProgramarViajePage implements OnInit {
+  viajeForm!: FormGroup;
   conductorId: string = '';
+  minFecha: string = ''; // Variable para almacenar la fecha mínima
 
   constructor(
+    public router: Router, // Cambia a `public` para que sea accesible desde el HTML
+    private fb: FormBuilder,
     private firestore: AngularFirestore,
-    private router: Router,
     private afAuth: AngularFireAuth
   ) {}
 
   ngOnInit() {
-    this.afAuth.onAuthStateChanged(user => {
+    // Configuramos la fecha mínima (hoy)
+    this.minFecha = new Date().toISOString();
+
+    // Configuramos el formulario reactivo con validaciones
+    this.viajeForm = this.fb.group({
+      destino: ['', Validators.required],
+      comunaViaje: ['', Validators.required],
+      fecha: ['', Validators.required],
+      precio: [null, [Validators.required, Validators.min(0)]],
+      asientos: [null, [Validators.required, Validators.min(1)]],
+      modelo: ['', Validators.required],
+      patente: ['', Validators.required],
+    });
+
+    // Obtenemos el ID del usuario autenticado (conductor)
+    this.afAuth.onAuthStateChanged((user) => {
       if (user) {
-        this.conductorId = user.uid; // Obtener el ID del conductor desde la autenticación
+        this.conductorId = user.uid;
       }
     });
   }
 
   // Método para programar el viaje
   programarViaje() {
+    if (this.viajeForm.invalid) {
+      return;
+    }
+
     const viaje: Viaje = {
-      destino: this.destino,
-      comunaViaje: this.comunaViaje,
-      fecha: this.fecha,
-      precio: this.precio,
-      asientos: this.asientos,
-      conductor: this.conductorId, // El ID del conductor se guarda aquí
-      modelo: this.modelo,
-      patente: this.patente,
-      pasajeros: [], // Inicialmente no hay pasajeros
-      estado: 'disponible' // El estado del viaje es 'disponible' cuando se programa
+      ...this.viajeForm.value,
+      conductor: this.conductorId,
+      pasajeros: [],
+      estado: 'disponible',
     };
 
-    // Guardar el viaje en Firestore
-    this.firestore.collection('viajes').add(viaje).then(() => {
-      console.log('Viaje programado exitosamente!');
-      this.router.navigate(['/home']);  // Redirigir a la página de inicio o la vista de viajes
-    }).catch((error) => {
-      console.error('Error al programar el viaje:', error);
-    });
-  }
-
-  // Verificar si el formulario es válido
-  formValid() {
-    return this.destino && this.comunaViaje && this.precio && this.asientos && this.modelo && this.patente;
-  }
-
-
-  volverAlHome() {
-    this.router.navigate(['/home']);  // Navega a la página Home
+    // Guardamos el viaje en Firestore
+    this.firestore
+      .collection('viajes')
+      .add(viaje)
+      .then(() => {
+        console.log('Viaje programado exitosamente');
+        this.router.navigate(['/home']);
+      })
+      .catch((error) => {
+        console.error('Error al programar el viaje:', error);
+      });
   }
 }
-
-
-
-
-
-

@@ -19,4 +19,11 @@
     --background: #20f7ef; 
     --color: rgb(0, 0, 0);
   }
+
+  .error {
+    color: var(--ion-color-danger);
+    font-size: 0.8rem;
+    margin-top: 4px;
+    padding-left: 15px;
+  }
   
