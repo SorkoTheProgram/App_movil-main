@@ -1,5 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { Component, OnInit, inject } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
+import { UtilsService } from '../../services/utils.service';
+import { ViajesService } from '../../services/viajes.service';
+import { Usuario, Viaje } from 'src/app/models/models';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-perfil',
@@ -7,40 +12,56 @@ import { NavController } from '@ionic/angular';
   styleUrls: ['./perfil.page.scss'],
 })
 export class PerfilPage implements OnInit {
+  usuario: Usuario | null = null;
+  viajes: Viaje[] = [];
+  
+  private authSvc = inject(AuthService);
+  private utilsSvc = inject(UtilsService);
+  private viajesSvc = inject(ViajesService);
 
-  usuario: any;
-  router: any;
-
-
-  constructor(private navCtrl: NavController) { }
+  constructor(private router: Router) {}
 
   ngOnInit() {
-    this.usuario = {
-      nombreCompleto: 'Juan Pérez',
-      email: 'juan.perez@example.com',
-      telefono: '+569 1234 5678',
-      vehiculo: {
-        modelo: 'Toyota Corolla',
-        placa: 'ABCD-123',
-        espaciosDisponibles: 3
-      },
-      historialViajes: 15,
-      calificacion: 4.5
-    };
+    this.cargarDatosUsuario();
   }
 
-  // Métodos para manejar acciones del usuario
+  async cargarDatosUsuario() {
+    this.usuario = this.utilsSvc.obtenerDelLocalStorage('usuario');
+    if (!this.usuario) {
+      try {
+        const usuarioData = await this.authSvc.obtenerDatosUsuarioActual();
+        if (usuarioData) {
+          this.usuario = usuarioData;
+          this.utilsSvc.guardarEnLocalStorage('usuario', usuarioData);
+          this.cargarHistorialViajes(usuarioData.email);
+        }
+      } catch (error) {
+        console.error('Error al obtener los datos del usuario:', error);
+      }
+    } else {
+      this.cargarHistorialViajes(this.usuario.email);
+    }
+  }
+
+  cargarHistorialViajes(usuarioId: string) {
+    this.viajesSvc.getHistorialViajes(usuarioId).subscribe(
+      (data: Viaje[]) => {
+        this.viajes = data;
+      },
+      (error) => {
+        console.error('Error al cargar el historial de viajes:', error);
+      }
+    );
+  }
+
   editarPerfil() {
     console.log('Editando perfil...');
-    // Lógica para editar el perfil
   }
 
   cerrarSesion() {
-    console.log('Cerrando sesión...');
-    // Lógica para cerrar la sesión del usuario
+    this.authSvc.cerrarSesion();
   }
-
-  volverHome() {
-    this.navCtrl.navigateBack('/home');
+  volverAlHome() {
+    this.router.navigate(['/home']);  // Usa el router para navegar
   }
 }

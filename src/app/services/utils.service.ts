@@ -30,7 +30,11 @@ export class UtilsService {
     });
     toast.present();
   }
-
+  obtenerDelLocalStorage(clave: string) {
+    const valor = localStorage.getItem(clave);
+    return valor ? JSON.parse(valor) : null;
+  }
+  
   guardarEnLocalStorage(clave: string, valor: any) {
     localStorage.setItem(clave, JSON.stringify(valor));
   }

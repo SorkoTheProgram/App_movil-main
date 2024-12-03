@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { getDoc, setDoc, doc, collection, addDoc } from "@angular/fire/firestore";
 import { UtilsService } from './utils.service';
+import { Usuario } from '../models/models'; // Asegúrate de que la ruta sea correcta
 
 @Injectable({
   providedIn: 'root'
@@ -57,16 +58,56 @@ export class AuthService {
       throw error;
     }
   }
-
-  async obtenerDocumento(ruta: string) {
+  async changePassword(newPassword: string, currentPassword: string) {
+    try {
+      const user = await this.afAuth.currentUser;
+      if (!user) {
+        throw new Error('Usuario no autenticado');
+      }
+  
+      // Reautenticar al usuario antes de actualizar la contraseña
+      const credential = await this.afAuth.signInWithEmailAndPassword(user.email!, currentPassword);
+      if (credential) {
+        await user.updatePassword(newPassword);
+        console.log('Contraseña actualizada con éxito');
+      }
+    } catch (error) {
+      console.error('Error al cambiar la contraseña:', error);
+      throw error;
+    }
+  }
+  
+  async obtenerDocumento(ruta: string): Promise<Usuario | null> {
     try {
       const docSnap = await getDoc(doc(this.firestore.firestore, ruta));
-      return docSnap.exists() ? docSnap.data() : null;
+      return docSnap.exists() ? (docSnap.data() as Usuario) : null;
     } catch (error) {
       console.error(`Error al obtener el documento de la ruta ${ruta}:`, error);
       throw error;
     }
   }
+async resetPasswordEmail(email: string) {
+  try {
+    await this.afAuth.sendPasswordResetEmail(email);
+    console.log('Correo de restablecimiento enviado.');
+  } catch (error) {
+    console.error('Error al enviar el correo de restablecimiento:', error);
+    throw error;
+  }
+}
+async obtenerDatosUsuarioActual() {
+  try {
+    const usuarioActual = await this.afAuth.currentUser;
+    if (usuarioActual) {
+      const uid = usuarioActual.uid;
+      return this.obtenerDocumento(`usuarios/${uid}`);
+    }
+    return null;
+  } catch (error) {
+    console.error('Error al obtener los datos del usuario actual:', error);
+    throw error;
+  }
+}
 
   establecerDocumento(ruta: string, data: any) {
     return setDoc(doc(this.firestore.firestore, ruta), data);
