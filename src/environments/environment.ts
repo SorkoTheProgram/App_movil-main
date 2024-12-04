@@ -9,6 +9,7 @@
 // Your web app's Firebase configuration
 export const environment = {
   production: false,
+  mapboxToken: 'pk.eyJ1IjoiY3Jpc3RpYW5kdW9jIiwiYSI6ImNtNGFkZThpODA2dnYycXB0YXVja3oxYmMifQ.SKCcsYUVVVDkgXjf6MjdTA',
   firebaseConfig: {
     apiKey: "AIzaSyBckMIJotq6y859L9MQm8bn1nR6JXsfni0",
     authDomain: "sorkoapp.firebaseapp.com",

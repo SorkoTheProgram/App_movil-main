@@ -52,5 +52,8 @@ export class HomePage implements OnInit {
     console.log('Navegando a "Programar Viaje"');
     this.router.navigate(['/programar-viaje']);
   }
+  iraMapa(){
+    this.router.navigate(['/mapa']);
+  }
 }
 
