@@ -2,12 +2,11 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <!-- Botón para volver atrás -->
-      <ion-back-button defaultHref="/home"></ion-back-button> 
+      <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
     <ion-title>Viajes Disponibles</ion-title>
   </ion-toolbar>
 </ion-header>
-
 
 <ion-content class="ion-padding">
   <ion-list>
@@ -16,10 +15,20 @@
         <h2>{{ viaje.destino }}</h2>
         <p>{{ viaje.comunaViaje }} - {{ viaje.fecha | date }}</p>
         <p>Precio: ${{ viaje.precio }}</p>
-        <ion-button (click)="solicitarViaje(viaje)">Solicitar Viaje</ion-button>
+        
+        <!-- Mostrar mensaje si el usuario ya está unido o si no puede unirse -->
+        <div *ngIf="isUserInTravel(viaje)" class="error-message">
+          Ya estás unido a este viaje o no puedes unirte a tu propio viaje.
+        </div>
+
+        <!-- Botón para solicitar unirse al viaje -->
+        <ion-button [disabled]="isUserInTravel(viaje)" (click)="solicitarViaje(viaje)">
+          Solicitar Viaje
+        </ion-button>
       </ion-label>
     </ion-item>
   </ion-list>
-</ion-content>
 
-<ion-loading *ngIf="!viajes" message="Cargando detalles del viaje..."></ion-loading>
+  <!-- Indicador de carga -->
+  <ion-loading [isOpen]="loading" message="Procesando solicitud..."></ion-loading>
+</ion-content>

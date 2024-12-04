@@ -35,3 +35,11 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+/* Estilo para el mensaje de error en rojo */
+.error-message {
+    color: #ff4e4e; /* Rojo claro */
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  

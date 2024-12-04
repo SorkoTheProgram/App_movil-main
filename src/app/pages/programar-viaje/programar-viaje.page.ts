@@ -13,6 +13,7 @@ import { Viaje } from 'src/app/models/models';
 export class ProgramarViajePage implements OnInit {
   viajeForm!: FormGroup;
   conductorId: string = '';
+  creadorEmail: string = ''; // Cambiar el nombre del campo a creadorEmail
   minFecha: string = ''; // Variable para almacenar la fecha mínima
 
   constructor(
@@ -37,10 +38,11 @@ export class ProgramarViajePage implements OnInit {
       patente: ['', Validators.required],
     });
 
-    // Obtenemos el ID del usuario autenticado (conductor)
+    // Obtenemos el ID y email del usuario autenticado (conductor)
     this.afAuth.onAuthStateChanged((user) => {
       if (user) {
         this.conductorId = user.uid;
+        this.creadorEmail = user.email || ''; // Guardamos el correo del creador
       }
     });
   }
@@ -54,6 +56,7 @@ export class ProgramarViajePage implements OnInit {
     const viaje: Viaje = {
       ...this.viajeForm.value,
       conductor: this.conductorId,
+      creadorEmail: this.creadorEmail, // Guardamos el correo del creador
       pasajeros: [],
       estado: 'disponible',
     };

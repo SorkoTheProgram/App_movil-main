@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Viaje } from '../../models/models'; // Ruta a tu archivo de modelos
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Viaje } from '../../models/models';
 
 @Component({
   selector: 'app-viajes-disponibles',
@@ -9,24 +10,80 @@ import { Viaje } from '../../models/models'; // Ruta a tu archivo de modelos
 })
 export class ViajesDisponiblesPage implements OnInit {
   viajes: Viaje[] = [];
+  userEmail: string | null = null;
+  loading: boolean = false; // Bandera para controlar el indicador de carga
+  disablingButtons: boolean = false; // Bandera para desactivar temporalmente los botones
 
-  constructor(private firestore: AngularFirestore) {}
+  constructor(
+    private firestore: AngularFirestore, 
+    private afAuth: AngularFireAuth
+  ) {}
 
   ngOnInit() {
-    // Cargar los viajes disponibles desde Firebase
-    this.firestore.collection('viajes', ref => ref.where('estado', '==', 'disponible')).snapshotChanges().subscribe(data => {
-      this.viajes = data.map(e => {
-        const viaje = e.payload.doc.data() as Viaje;
-        viaje.id = e.payload.doc.id;  // Accedemos al ID del viaje
-
-        // No necesitamos hacer ninguna conversión de fecha, ya que ahora es un string
-        return viaje;
-      });
+    // Obtener el email del usuario autenticado
+    this.afAuth.currentUser.then((user) => {
+      if (user) {
+        this.userEmail = user.email;
+      }
     });
+
+    // Cargar los viajes disponibles desde Firebase
+    this.firestore
+      .collection('viajes', (ref) => ref.where('estado', '==', 'disponible'))
+      .snapshotChanges()
+      .subscribe((data) => {
+        this.viajes = data.map((e) => {
+          const viaje = e.payload.doc.data() as Viaje;
+          viaje.id = e.payload.doc.id; // Obtener el ID del viaje
+          return viaje;
+        });
+      });
   }
 
-  solicitarViaje(viaje: Viaje) {
-    // Lógica para solicitar un viaje
-    console.log('Viaje solicitado:', viaje);
+  // Verificar si el usuario está intentando unirse a su propio viaje o ya está en el viaje
+  isUserInTravel(viaje: Viaje) {
+    // Verifica si el usuario es el conductor o si ya está en el viaje
+    return viaje.pasajeros.includes(this.userEmail) || viaje.creadorEmail === this.userEmail;
+  }
+
+  async solicitarViaje(viaje: Viaje) {
+    if (!this.userEmail) {
+      console.error('Usuario no autenticado');
+      return;
+    }
+
+    this.loading = true; // Mostrar indicador de carga
+    this.disablingButtons = true; // Desactivar temporalmente los botones
+
+    try {
+      // Verificar si el usuario ya está en la lista de pasajeros
+      const viajeRef = this.firestore.collection('viajes').doc(viaje.id);
+      const viajeDoc = await viajeRef.get().toPromise();
+      const viajeData = viajeDoc?.data() as Viaje;
+
+      // Verificar si el usuario ya está en el viaje o es el creador
+      if (viajeData.pasajeros.includes(this.userEmail)) {
+        console.log('Ya estás unido a este viaje.');
+        return;
+      }
+
+      // Si el usuario es el conductor, no puede unirse
+      if (viajeData.creadorEmail === this.userEmail) {
+        console.log('No puedes unirte a tu propio viaje.');
+        return;
+      }
+
+      // Agregar al usuario a la lista de pasajeros
+      await viajeRef.update({
+        pasajeros: [...viajeData.pasajeros, this.userEmail],
+      });
+
+      console.log('Te has unido al viaje con éxito.');
+    } catch (error) {
+      console.error('Error al unirse al viaje:', error);
+    } finally {
+      this.loading = false; // Ocultar indicador de carga
+      this.disablingButtons = false; // Reactivar botones
+    }
   }
 }

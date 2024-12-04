@@ -16,4 +16,5 @@ export interface Viaje {
     patente: string;
     pasajeros: string[];
     estado: 'disponible' | 'cancelado' | 'finalizado' | 'iniciado' | 'pendiente' | 'lleno';
+    creadorEmail: string; // Correo del creador del viaje
 }
