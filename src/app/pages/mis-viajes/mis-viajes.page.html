@@ -1,13 +1,24 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>mis_viajes</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button> <!-- Volver a la página principal -->
+    </ion-buttons>
+    <ion-title>Mis Viajes</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">mis_viajes</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <ion-list>
+    <!-- Mostrar los viajes que el usuario ha creado -->
+    <ion-item *ngFor="let viaje of viajes">
+      <ion-label>
+        <h2>{{ viaje.destino }}</h2>
+        <p>{{ viaje.comunaViaje }} - {{ viaje.fecha | date }}</p>
+        <p>Precio: ${{ viaje.precio }}</p>
+        <ion-button routerLink="/viaje-detalle/{{ viaje.id }}">Ver Detalles</ion-button>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-loading *ngIf="!viajes" message="Cargando tus viajes..."></ion-loading>
 </ion-content>
