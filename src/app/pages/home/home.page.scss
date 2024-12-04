@@ -68,3 +68,28 @@ ion-toolbar {
   border-radius: 10px; /* Bordes redondeados si deseas darle un estilo más suave */
   object-fit: cover; /* Asegura que la imagen se recorte adecuadamente sin distorsionar su relación de aspecto */
 }
+.button-container {
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+ion-button {
+  width: 90%; /* Asegura que ambos botones ocupen el mismo ancho */
+  max-width: 400px; /* Limita el ancho máximo */
+  --border-radius: 25px;
+  --background: #1a5276; /* Azul serio */
+  --background-activated: #154360; /* Azul más oscuro */
+  --background-focused: #154360; 
+  --background-hover: #154360;
+  padding: 15px;
+  font-size: 1.2em;
+  font-family: 'TT Firs Text', sans-serif; /* Usar TT Firs Text para el texto del botón */
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  color: #fff; /* Blanco para el texto */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
