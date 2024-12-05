@@ -27,7 +27,7 @@
         </div>
 
         <!-- Botón para solicitar unirse al viaje -->
-        <ion-button [disabled]="isUserInTravel(viaje) || viaje.asientos <= 0" (click)="solicitarViaje(viaje)">
+        <ion-button [disabled]="isUserInTravel(viaje) || viaje.asientos <= 0" (click)="irAPago(viaje)">
           Solicitar Viaje
         </ion-button>
 

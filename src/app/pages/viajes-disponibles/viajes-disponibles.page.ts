@@ -12,8 +12,8 @@ import { Router } from '@angular/router';
 export class ViajesDisponiblesPage implements OnInit {
   viajes: Viaje[] = [];
   userEmail: string | null = null;
-  loading: boolean = false; // Bandera para controlar el indicador de carga
-  disablingButtons: boolean = false; // Bandera para desactivar temporalmente los botones
+  loading: boolean = false;
+  disablingButtons: boolean = false;
 
   constructor(
     private firestore: AngularFirestore, 
@@ -81,10 +81,11 @@ export class ViajesDisponiblesPage implements OnInit {
 
       console.log('Te has unido al viaje con éxito.');
 
-      // Guardar en localStorage (si lo deseas)
-      let viajesGuardados = JSON.parse(localStorage.getItem('viajesActuales') || '[]');
-      viajesGuardados.push(viaje);
-      localStorage.setItem('viajesActuales', JSON.stringify(viajesGuardados));
+      // Guardar en localStorage el viaje para llevarlo a la página de pago
+      localStorage.setItem('viajeSeleccionado', JSON.stringify(viaje));
+
+      // Redirigir a la página de pago
+      this.router.navigate(['/pago']);
     } catch (error) {
       console.error('Error al unirse al viaje:', error);
     } finally {
@@ -94,11 +95,14 @@ export class ViajesDisponiblesPage implements OnInit {
   }
 
   verEnMapa(viaje: Viaje) {
-    // Guardar coordenadas del viaje en localStorage para luego usarlas en el mapa
-    const coordenadas = viaje.coordenadas; // Asegúrate de que 'coordenadas' esté presente en tu modelo 'Viaje'
+    const coordenadas = viaje.coordenadas;
     localStorage.setItem('coordenadasViaje', JSON.stringify(coordenadas));
-
-    // Navegar a la página del mapa
     this.router.navigate(['/mapa']);
+  }
+
+  irAPago(viaje: Viaje) {
+    // Este método redirige a la página de pago y guarda el viaje seleccionado en localStorage
+    localStorage.setItem('viajeSeleccionado', JSON.stringify(viaje));
+    this.router.navigate(['/pago']);
   }
 }
