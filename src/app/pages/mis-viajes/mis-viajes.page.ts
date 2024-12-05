@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AlertController } from '@ionic/angular';
-import { Viaje } from 'src/app/models/models';
+import { AlertController } from '@ionic/angular';  // Asegúrate de tener importado AlertController
+import { Viaje } from 'src/app/models/models'; // Ruta al modelo de Viaje
 
 @Component({
   selector: 'app-mis-viajes',
@@ -17,7 +17,7 @@ export class MisViajesPage implements OnInit {
   constructor(
     private firestore: AngularFirestore,
     private afAuth: AngularFireAuth,
-    private alertController: AlertController
+    private alertController: AlertController // Inyección de AlertController
   ) {}
 
   ngOnInit() {
@@ -52,6 +52,7 @@ export class MisViajesPage implements OnInit {
       );
   }
 
+  // Método para mostrar una alerta de confirmación antes de cancelar el viaje
   async confirmarCancelacion(viaje: Viaje) {
     const alert = await this.alertController.create({
       header: 'Cancelar Viaje',
@@ -64,7 +65,7 @@ export class MisViajesPage implements OnInit {
         {
           text: 'Sí',
           handler: () => {
-            this.cancelarViaje(viaje);
+            this.cancelarViaje(viaje); // Si confirma, se ejecuta la cancelación
           },
         },
       ],
@@ -73,12 +74,13 @@ export class MisViajesPage implements OnInit {
     await alert.present();
   }
 
+  // Método para cancelar un viaje
   cancelarViaje(viaje: Viaje) {
     this.loading = true; // Mostrar el indicador de carga
     this.firestore
       .collection('viajes')
       .doc(viaje.id)
-      .delete()
+      .delete() // Eliminar el viaje de Firestore
       .then(() => {
         console.log(`Viaje a ${viaje.destino} cancelado.`);
         this.cargarMisViajes(); // Recargar los viajes después de eliminar uno

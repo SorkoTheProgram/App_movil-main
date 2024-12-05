@@ -8,20 +8,27 @@
     <ion-content>
       <ion-list>
         <ion-menu-toggle auto-hide="true">
+          <!-- Opción Inicio -->
           <ion-item routerLink="/home">
-            <ion-icon slot="start" name="home-outline"></ion-icon>
+            <ion-icon slot="start" name="home-outline"></ion-icon> <!-- Icono para inicio -->
             <ion-label>Inicio</ion-label>
           </ion-item>
+
+          <!-- Opción Perfil -->
           <ion-item routerLink="/perfil">
-            <ion-icon slot="start" name="person-outline"></ion-icon>
+            <ion-icon slot="start" name="person-circle-outline"></ion-icon> <!-- Icono para perfil -->
             <ion-label>Perfil</ion-label>
           </ion-item>
+
+          <!-- Opción Viajes Programados -->
           <ion-item routerLink="/mis-viajes">
-            <ion-icon slot="start" name="person-outline"></ion-icon>
+            <ion-icon slot="start" name="calendar-outline"></ion-icon> <!-- Icono para viajes programados -->
             <ion-label>Viajes Programados</ion-label>
           </ion-item>
+
+          <!-- Opción Viajes En Curso -->
           <ion-item routerLink="/viaje-actual">
-            <ion-icon slot="start" name="person-outline"></ion-icon>
+            <ion-icon slot="start" name="car-outline"></ion-icon> <!-- Icono para viajes en curso -->
             <ion-label>Viajes En Curso</ion-label>
           </ion-item>
         </ion-menu-toggle>

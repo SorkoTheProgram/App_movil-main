@@ -1,0 +1,58 @@
+/* Definir la fuente por defecto para todo el contenido */
+body {
+    font-family: 'TT Firs Text', sans-serif;
+  }
+  
+  ion-card-title {
+    text-align: center;
+    font-family: 'TT Firs Neue', sans-serif; /* Fuente para los títulos */
+    font-size: 1.6em;
+    font-weight: bold;
+    color: #2c3e50; /* Gris oscuro */
+  }
+  
+  ion-card {
+    --background: #ffffff;
+    --border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  ion-button {
+    --border-radius: 25px;
+    --background: #1a5276; /* Azul serio */
+    --background-activated: #154360; /* Azul más oscuro */
+    --background-focused: #154360; 
+    --background-hover: #154360;
+    padding: 15px;
+    margin-top: 20px;
+    font-size: 1.2em;
+    font-family: 'TT Firs Text', sans-serif; /* Usar TT Firs Text para el texto del botón */
+    text-transform: uppercase;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  button h2 {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #fff;
+  }
+  
+  ion-toolbar {
+    --background: #1a5276; /* Azul serio en la barra de herramientas */
+    --color: #fff; /* Blanco para los textos */
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .welcome-card {
+    background: #f4f4f4; /* Fondo suave */
+    margin-top: 20px;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  
