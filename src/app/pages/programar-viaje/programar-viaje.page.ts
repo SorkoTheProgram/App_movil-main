@@ -13,9 +13,10 @@ import { Viaje, Usuario } from 'src/app/models/models';
 export class ProgramarViajePage implements OnInit {
   viajeForm!: FormGroup;
   conductorId: string = '';
-  creadorEmail: string = '';
-  conductorNombreCompleto: string = '';
-  minFecha: string = '';
+  creadorEmail: string = ''; 
+  conductorNombreCompleto: string = ''; // Aquí guardaremos el nombre y apellido concatenados
+  minFecha: string = ''; 
+  coordenadas: { latitud: number; longitud: number } = { latitud: 0, longitud: 0 };
 
   constructor(
     public router: Router,
@@ -59,6 +60,22 @@ export class ProgramarViajePage implements OnInit {
     });
   }
 
+  getCoordenadasConductor() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.coordenadas.latitud = position.coords.latitude;
+        this.coordenadas.longitud = position.coords.longitude;
+
+        // Guardar en localStorage las coordenadas
+        localStorage.setItem('coordenadas', JSON.stringify(this.coordenadas));
+
+        console.log('Coordenadas:', this.coordenadas);
+      });
+    } else {
+      console.log('Geolocalización no disponible');
+    }
+  }
+
   programarViaje() {
     if (this.viajeForm.invalid) {
       return;
@@ -70,6 +87,7 @@ export class ProgramarViajePage implements OnInit {
       creadorEmail: this.creadorEmail,
       pasajeros: [],
       estado: 'disponible',
+      coordenadas: this.coordenadas,
     };
 
     // Guardar en Firestore
