@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AlertController } from '@ionic/angular';  // Asegúrate de tener importado AlertController
-import { Viaje } from 'src/app/models/models'; // Ruta al modelo de Viaje
+import { AlertController } from '@ionic/angular';
+import { Viaje } from 'src/app/models/models';
 
 @Component({
   selector: 'app-mis-viajes',
@@ -10,20 +10,20 @@ import { Viaje } from 'src/app/models/models'; // Ruta al modelo de Viaje
   styleUrls: ['./mis-viajes.page.scss'],
 })
 export class MisViajesPage implements OnInit {
-  viajes: Viaje[] = []; // Lista de viajes creados por el usuario
-  userEmail: string | null = null; // Email del usuario logueado
-  loading: boolean = false; // Indicador de carga
+  viajes: Viaje[] = [];
+  userEmail: string | null = null;
+  loading: boolean = false;
 
   constructor(
     private firestore: AngularFirestore,
     private afAuth: AngularFireAuth,
-    private alertController: AlertController // Inyección de AlertController
+    private alertController: AlertController
   ) {}
 
   ngOnInit() {
     this.afAuth.onAuthStateChanged((user) => {
       if (user) {
-        this.userEmail = user.email; // Guardar el email del usuario logueado
+        this.userEmail = user.email;
         this.cargarMisViajes();
       }
     });
@@ -32,7 +32,7 @@ export class MisViajesPage implements OnInit {
   cargarMisViajes() {
     if (!this.userEmail) return;
 
-    this.loading = true; // Mostrar el indicador de carga
+    this.loading = true;
     this.firestore
       .collection('viajes', (ref) => ref.where('creadorEmail', '==', this.userEmail))
       .snapshotChanges()
@@ -40,10 +40,10 @@ export class MisViajesPage implements OnInit {
         (data) => {
           this.viajes = data.map((e) => {
             const viaje = e.payload.doc.data() as Viaje;
-            viaje.id = e.payload.doc.id; // Obtener el ID del viaje
+            viaje.id = e.payload.doc.id;
             return viaje;
           });
-          this.loading = false; // Ocultar el indicador de carga
+          this.loading = false;
         },
         (error) => {
           console.error('Error al cargar los viajes:', error);
@@ -52,11 +52,10 @@ export class MisViajesPage implements OnInit {
       );
   }
 
-  // Método para mostrar una alerta de confirmación antes de cancelar el viaje
   async confirmarCancelacion(viaje: Viaje) {
     const alert = await this.alertController.create({
       header: 'Cancelar Viaje',
-      message: `¿Estás seguro de que deseas cancelar el viaje a ${viaje.destino}?`,
+      message: `¿Estás seguro que deseas cancelar el viaje a ${viaje.destino}?`,
       buttons: [
         {
           text: 'No',
@@ -65,7 +64,7 @@ export class MisViajesPage implements OnInit {
         {
           text: 'Sí',
           handler: () => {
-            this.cancelarViaje(viaje); // Si confirma, se ejecuta la cancelación
+            this.cancelarViaje(viaje);
           },
         },
       ],
@@ -74,22 +73,21 @@ export class MisViajesPage implements OnInit {
     await alert.present();
   }
 
-  // Método para cancelar un viaje
   cancelarViaje(viaje: Viaje) {
-    this.loading = true; // Mostrar el indicador de carga
+    this.loading = true;
     this.firestore
       .collection('viajes')
       .doc(viaje.id)
-      .delete() // Eliminar el viaje de Firestore
+      .delete()
       .then(() => {
         console.log(`Viaje a ${viaje.destino} cancelado.`);
-        this.cargarMisViajes(); // Recargar los viajes después de eliminar uno
+        this.cargarMisViajes();
       })
       .catch((error) => {
         console.error('Error al cancelar el viaje:', error);
       })
       .finally(() => {
-        this.loading = false; // Ocultar el indicador de carga
+        this.loading = false;
       });
   }
 }

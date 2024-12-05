@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Pago</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="pagoForm" (ngSubmit)="procesarPago()">
+    <ion-item>
+      <ion-label position="floating">Nombre del Titular</ion-label>
+      <ion-input formControlName="nombre" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Número de Tarjeta</ion-label>
+      <ion-input formControlName="numero" type="text" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Fecha de Vencimiento</ion-label>
+      <ion-input formControlName="fechaVencimiento" type="text" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">CVC</ion-label>
+      <ion-input formControlName="cvc" type="text" required></ion-input>
+    </ion-item>
+
+    <ion-button expand="full" type="submit" [disabled]="pagoForm.invalid">Pagar</ion-button>
+  </form>
+</ion-content>
