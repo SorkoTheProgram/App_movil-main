@@ -51,9 +51,14 @@ const routes: Routes = [
   },   {
     path: 'mis-viajes',
     loadChildren: () => import('./pages/mis-viajes/mis-viajes.module').then( m => m.MisViajesPageModule)
-  },  {
+  },
+  {
     path: 'mapa',
     loadChildren: () => import('./pages/mapa/mapa.module').then( m => m.MapaPageModule)
+  },
+  {
+    path: 'viaje-actual',
+    loadChildren: () => import('./viaje-actual/viaje-actual.module').then( m => m.ViajeActualPageModule)
   },
 
 
