@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
-import { AngularFirestore } from '@angular/fire/compat/firestore'; // Inyectar AngularFirestore
-import { AngularFireAuth } from '@angular/fire/compat/auth'; // Inyectar AngularFireAuth para obtener el email del usuario
-import { Viaje } from 'src/app/models/models'; // Importar el tipo Viaje para tipar viajeData
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFireAuth } from '@angular/fire/compat/auth'; 
+import { Viaje } from 'src/app/models/models'; 
 
 @Component({
   selector: 'app-pago',
@@ -13,15 +13,15 @@ import { Viaje } from 'src/app/models/models'; // Importar el tipo Viaje para ti
 })
 export class PagoPage implements OnInit {
   pagoForm!: FormGroup;
-  viajeSeleccionado: Viaje | undefined; // Aquí guardamos la información del viaje seleccionado
-  userEmail: string | null = null; // Variable para almacenar el email del usuario
+  viajeSeleccionado: Viaje | undefined; 
+  userEmail: string | null = null; 
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private toastController: ToastController,
-    private firestore: AngularFirestore, // Inyectar AngularFirestore para hacer actualizaciones en la base de datos
-    private afAuth: AngularFireAuth // Inyectar AngularFireAuth para obtener el email del usuario
+    private firestore: AngularFirestore, 
+    private afAuth: AngularFireAuth 
   ) {}
 
   ngOnInit() {
@@ -34,9 +34,15 @@ export class PagoPage implements OnInit {
     // Inicializamos el formulario de pago
     this.pagoForm = this.fb.group({
       nombre: ['', Validators.required],
-      numero: ['', [Validators.required, Validators.pattern('^[0-9]{16}$')]],
+      numero: ['', [
+        Validators.required, 
+        Validators.pattern('^[0-9]{16}$')
+      ]],
       fechaVencimiento: ['', Validators.required],
-      cvc: ['', [Validators.required, Validators.pattern('^[0-9]{3}$')]],
+      cvc: ['', [
+        Validators.required, 
+        Validators.pattern('^[0-9]{3}$')
+      ]],
     });
 
     // Obtener el email del usuario autenticado
@@ -60,7 +66,7 @@ export class PagoPage implements OnInit {
     if (this.viajeSeleccionado) {
       const viajeRef = this.firestore.collection('viajes').doc(this.viajeSeleccionado.id);
       const viajeDoc = await viajeRef.get().toPromise();
-      const viajeData = viajeDoc?.data() as Viaje; // Usamos el tipo Viaje
+      const viajeData = viajeDoc?.data() as Viaje;
 
       if (viajeData) {
         // Reducir los asientos disponibles y agregar al usuario como pasajero
