@@ -1,8 +1,8 @@
 
-# Proyecto MiTransporteApp
+# Proyecto TeLlevoApp
 
 ## Descripción  
-**MiTransporteApp** es una aplicación móvil desarrollada como parte de la asignatura **"Programación de Aplicaciones Móviles"**. Su propósito principal es conectar conductores y pasajeros para facilitar el transporte compartido, ofreciendo una solución cómoda y económica para desplazarse.
+**TeLlevoApp** es una aplicación móvil desarrollada como parte de la asignatura **"Programación de Aplicaciones Móviles"**. Su propósito principal es conectar conductores y pasajeros para facilitar el transporte compartido, ofreciendo una solución cómoda y económica para desplazarse.
 
 ## Tecnologías Utilizadas  
 - **Ionic Framework**: Para la creación de interfaces modernas y responsivas.  
@@ -15,11 +15,11 @@ Para ejecutar el proyecto localmente, sigue los siguientes pasos:
 
 1. Clona este repositorio:  
    ```bash
-   git clone https://github.com/tu-usuario/MiTransporteApp.git
+   git clone https://github.com/SorkoTheProgram/App_movil-main.git
    ```
 2. Accede al directorio del proyecto:  
    ```bash
-   cd MiTransporteApp
+   cd App_movil_main
    ```
 3. Instala las dependencias:  
    ```bash
@@ -31,14 +31,13 @@ Para ejecutar el proyecto localmente, sigue los siguientes pasos:
    ```
 
 ## Objetivo del Proyecto  
-MiTransporteApp tiene como objetivo crear una plataforma que conecte a estudiantes que necesitan transporte con conductores que tienen espacio disponible en sus vehículos. Este modelo promueve el ahorro, la sostenibilidad y la colaboración dentro de la comunidad estudiantil.
+TeLlevoApp tiene como objetivo crear una plataforma que conecte a estudiantes que necesitan transporte con conductores que tienen espacio disponible en sus vehículos. Este modelo promueve el ahorro, la sostenibilidad y la colaboración dentro de la comunidad estudiantil.
 
 ## Características Principales  
 - **Gestión de Usuarios**: Registro e inicio de sesión como conductor o pasajero.  
 - **Búsqueda de Viajes**: Encuentra rutas disponibles según tu ubicación y destino.  
 - **Creación de Viajes**: Los conductores pueden publicar trayectos y gestionar reservas.  
-- **Reservas y Pagos**: Reserva un asiento y paga fácilmente al conductor mediante la aplicación.  
-- **Calificaciones y Opiniones**: Comparte tu experiencia con otros usuarios a través de reseñas.
+- **Reservas**: Reserva un asiento fácilmente al conductor mediante la aplicación.  
 
 ## Requisitos del Sistema  
 - **Node.js**: Versión 12 o superior.  
