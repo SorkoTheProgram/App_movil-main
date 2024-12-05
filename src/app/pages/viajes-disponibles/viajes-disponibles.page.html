@@ -25,6 +25,10 @@
         <ion-button [disabled]="isUserInTravel(viaje)" (click)="solicitarViaje(viaje)">
           Solicitar Viaje
         </ion-button>
+
+        <ion-button (click)="verEnMapa(viaje)">
+          Ver en el Mapa
+        </ion-button>
       </ion-label>
     </ion-item>
   </ion-list>

@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment.prod';
 @Injectable({
   providedIn: 'root'
 })
-export class MapaboxService {
+export class MapboxService {
 
 
   constructor() {

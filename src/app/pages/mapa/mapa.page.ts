@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import mapboxgl from 'mapbox-gl';
-import { MapaboxService } from 'src/app/services/mapbox.service';
+import { MapboxService } from 'src/app/services/mapbox.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -12,7 +12,7 @@ export class MapaPage implements OnInit, AfterViewInit {
   map: mapboxgl.Map | undefined;
   userLocation: mapboxgl.LngLat | undefined;
 
-  constructor(private mapaboxService: MapaboxService) {}
+  constructor(private mapboxService: MapboxService) {}
   inicio: [number, number]
   fin: [number, number]
 
@@ -30,7 +30,7 @@ export class MapaPage implements OnInit, AfterViewInit {
 
     try {
       // Crear el mapa
-      const mapa = await this.mapaboxService.buildMap((map) => {
+      const mapa = await this.mapboxService.buildMap((map) => {
         // Este callback se ejecuta cuando el mapa se carga
         console.log('Mapa cargado', map);
         
@@ -47,7 +47,7 @@ export class MapaPage implements OnInit, AfterViewInit {
 
      
           // Llamar al servicio para trazar la ruta
-          this.mapaboxService.obtenerRuta(map, this.inicio, this.fin)
+          this.mapboxService.obtenerRuta(map, this.inicio, this.fin)
             .then(() => {
               console.log('Ruta mostrada en el mapa');
               
