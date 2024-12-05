@@ -60,6 +60,7 @@ export class MapaPage implements OnInit, AfterViewInit {
 
   // Método para volver a la página de "Viajes Disponibles"
   volverAViajesDisponibles() {
-    this.router.navigate(['/viajes-disponibles']);  // Redirigir a la página de Viajes Disponibles
+    // Asegurarse de que no esté causando un bucle de navegación
+    this.router.navigateByUrl('/viajes-disponibles');  // Redirigir a la página de Viajes Disponibles
   }
 }
