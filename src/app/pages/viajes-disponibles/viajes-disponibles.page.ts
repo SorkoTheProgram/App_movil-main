@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { Viaje } from '../../models/models';
+import { Viaje } from '../../models/models'; // Ruta al modelo de Viaje
 
 @Component({
   selector: 'app-viajes-disponibles',
@@ -45,6 +45,7 @@ export class ViajesDisponiblesPage implements OnInit {
     return viaje.pasajeros.includes(this.userEmail) || viaje.creadorEmail === this.userEmail;
   }
 
+  // Método para solicitar unirse a un viaje
   async solicitarViaje(viaje: Viaje) {
     if (!this.userEmail) {
       console.error('Usuario no autenticado');
@@ -70,17 +71,26 @@ export class ViajesDisponiblesPage implements OnInit {
         return;
       }
 
-      // Agregar al usuario a la lista de pasajeros
+      // Verificar si hay asientos disponibles
+      if (viajeData.asientos <= 0) {
+        console.log('El viaje está lleno.');
+        alert('No hay asientos disponibles en este viaje.');
+        return;
+      }
+
+      // Reducir el número de asientos disponibles
       await viajeRef.update({
         pasajeros: [...viajeData.pasajeros, this.userEmail],
+        asientos: viajeData.asientos - 1, // Decrementar los asientos disponibles
       });
 
-      // Guardar en localStorage
+      console.log('Te has unido al viaje con éxito.');
+
+      // Guardar en localStorage (si lo deseas)
       let viajesGuardados = JSON.parse(localStorage.getItem('viajesActuales') || '[]');
       viajesGuardados.push(viaje);
       localStorage.setItem('viajesActuales', JSON.stringify(viajesGuardados));
 
-      console.log('Te has unido al viaje con éxito.');
     } catch (error) {
       console.error('Error al unirse al viaje:', error);
     } finally {

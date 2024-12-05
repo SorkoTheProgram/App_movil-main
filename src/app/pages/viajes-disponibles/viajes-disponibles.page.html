@@ -1,7 +1,6 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <!-- Botón para volver atrás -->
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
     <ion-title>Viajes Disponibles</ion-title>
@@ -13,16 +12,22 @@
     <ion-item *ngFor="let viaje of viajes">
       <ion-label>
         <h2>{{ viaje.destino }}</h2>
-        <p>{{ viaje.comunaViaje }} - {{ viaje.fecha | date }}</p>
+        <p>{{ viaje.comunaViaje }} - {{ viaje.fecha | date: 'dd/MM/yyyy' }}</p>
         <p>Precio: ${{ viaje.precio }}</p>
-        
-        <!-- Mostrar mensaje si el usuario ya está unido o si no puede unirse -->
+        <p><strong>Asientos disponibles:</strong> {{ viaje.asientos }}</p>
+
+        <!-- Mensaje si ya estás unido o si no hay más asientos disponibles -->
         <div *ngIf="isUserInTravel(viaje)" class="error-message">
           Ya estás unido a este viaje o no puedes unirte a tu propio viaje.
         </div>
 
+        <!-- Mensaje cuando no hay asientos disponibles -->
+        <div *ngIf="viaje.asientos <= 0" class="error-message" style="color: red;">
+          ¡No hay más espacio disponible en este viaje!
+        </div>
+
         <!-- Botón para solicitar unirse al viaje -->
-        <ion-button [disabled]="isUserInTravel(viaje)" (click)="solicitarViaje(viaje)">
+        <ion-button [disabled]="isUserInTravel(viaje) || viaje.asientos <= 0" (click)="solicitarViaje(viaje)">
           Solicitar Viaje
         </ion-button>
       </ion-label>

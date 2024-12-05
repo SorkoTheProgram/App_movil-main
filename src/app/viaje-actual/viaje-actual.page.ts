@@ -34,8 +34,6 @@ export class ViajeActualPage implements OnInit {
     if (!this.userEmail) return;
 
     this.loading = true;
-
-    // Intentar obtener los viajes desde Firebase
     this.firestore
       .collection('viajes', (ref) =>
         ref.where('pasajeros', 'array-contains', this.userEmail)
@@ -53,9 +51,6 @@ export class ViajeActualPage implements OnInit {
         (error) => {
           console.error('Error al cargar los viajes actuales:', error);
           this.loading = false;
-          // Si ocurre un error al obtener los datos desde Firebase, intentar obtenerlo del localStorage
-          const viajesGuardados = JSON.parse(localStorage.getItem('viajesActuales') || '[]');
-          this.viajesActuales = viajesGuardados;
         }
       );
   }
@@ -83,32 +78,32 @@ export class ViajeActualPage implements OnInit {
   }
 
   // Cancelar la participación en un viaje
-  cancelarViaje(viaje: Viaje) {
+  async cancelarViaje(viaje: Viaje) {
     if (!this.userEmail) return;
 
     this.loading = true;
 
     const viajeRef = this.firestore.collection('viajes').doc(viaje.id);
-    viajeRef
-      .update({
-        pasajeros: viaje.pasajeros.filter((email) => email !== this.userEmail),
-      })
-      .then(() => {
-        console.log(`Has cancelado tu participación en el viaje a ${viaje.destino}`);
-        // Eliminar el viaje de los viajes actuales almacenados en localStorage
-        const viajesGuardados = JSON.parse(localStorage.getItem('viajesActuales') || '[]');
-        const index = viajesGuardados.findIndex((v: Viaje) => v.id === viaje.id);
-        if (index > -1) {
-          viajesGuardados.splice(index, 1);
-        }
-        localStorage.setItem('viajesActuales', JSON.stringify(viajesGuardados));
-        this.cargarViajesActuales();
-      })
-      .catch((error) => {
-        console.error('Error al cancelar el viaje:', error);
-      })
-      .finally(() => {
-        this.loading = false;
+    // Filtramos a los pasajeros para eliminar al usuario
+    const pasajerosActualizados = viaje.pasajeros.filter(
+      (email) => email !== this.userEmail
+    );
+
+    // Sumar un asiento disponible al cancelar
+    const asientosDisponiblesActualizados = viaje.asientos + 1;
+
+    try {
+      await viajeRef.update({
+        pasajeros: pasajerosActualizados,
+        asientos: asientosDisponiblesActualizados, // Sumamos un asiento
       });
+
+      console.log(`Has cancelado tu participación en el viaje a ${viaje.destino}`);
+      this.cargarViajesActuales(); // Recargamos los viajes actuales
+    } catch (error) {
+      console.error('Error al cancelar el viaje:', error);
+    } finally {
+      this.loading = false;
+    }
   }
 }

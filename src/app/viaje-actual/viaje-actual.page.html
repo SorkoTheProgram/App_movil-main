@@ -19,6 +19,7 @@
     </ion-item>
   </ion-list>
 
+  <!-- Mostrar indicador de carga -->
   <ion-loading [isOpen]="loading" message="Cargando viajes actuales..."></ion-loading>
 
   <div *ngIf="viajesActuales.length === 0 && !loading" class="no-travels">
