@@ -16,9 +16,16 @@
         <p>{{ viaje.comunaViaje }} - {{ viaje.fecha | date }}</p>
         <p>Precio: ${{ viaje.precio }}</p>
         <ion-button routerLink="/viaje-detalle/{{ viaje.id }}">Ver Detalles</ion-button>
+        <ion-button color="danger" (click)="confirmarCancelacion(viaje)">Cancelar</ion-button>
       </ion-label>
     </ion-item>
   </ion-list>
 
-  <ion-loading *ngIf="!viajes" message="Cargando tus viajes..."></ion-loading>
+  <!-- Mostrar mensaje si no hay viajes creados -->
+  <div *ngIf="viajes.length === 0 && !loading" class="no-travels">
+    <p>No tienes viajes creados.</p>
+  </div>
+
+  <!-- Indicador de carga -->
+  <ion-loading [isOpen]="loading" message="Cargando tus viajes..."></ion-loading>
 </ion-content>
