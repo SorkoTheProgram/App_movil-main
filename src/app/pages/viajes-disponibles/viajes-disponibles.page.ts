@@ -92,9 +92,10 @@ export class ViajesDisponiblesPage implements OnInit {
       this.disablingButtons = false;
     }
   }
+
   verEnMapa(viaje: Viaje) {
     // Guardar coordenadas del viaje en localStorage para luego usarlas en el mapa
-    const coordenadas = viaje.coordenadas;
+    const coordenadas = viaje.coordenadas; // Asegúrate de que 'coordenadas' esté presente en tu modelo 'Viaje'
     localStorage.setItem('coordenadasViaje', JSON.stringify(coordenadas));
 
     // Navegar a la página del mapa
