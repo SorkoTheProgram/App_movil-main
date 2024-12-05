@@ -3,8 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
-import { Viaje } from 'src/app/models/models';
-import { Usuario } from 'src/app/models/models'; // Importa el tipo Usuario
+import { Viaje, Usuario } from 'src/app/models/models';
 
 @Component({
   selector: 'app-programar-viaje',
@@ -14,9 +13,9 @@ import { Usuario } from 'src/app/models/models'; // Importa el tipo Usuario
 export class ProgramarViajePage implements OnInit {
   viajeForm!: FormGroup;
   conductorId: string = '';
-  creadorEmail: string = ''; 
-  conductorNombreCompleto: string = ''; // Aquí guardaremos el nombre y apellido concatenados
-  minFecha: string = ''; 
+  creadorEmail: string = '';
+  conductorNombreCompleto: string = '';
+  minFecha: string = '';
 
   constructor(
     public router: Router,
@@ -28,7 +27,7 @@ export class ProgramarViajePage implements OnInit {
   ngOnInit() {
     this.minFecha = new Date().toISOString();
 
-    // Configuramos el formulario reactivo con validaciones
+    // Configurar formulario reactivo
     this.viajeForm = this.fb.group({
       destino: ['', Validators.required],
       comunaViaje: ['', Validators.required],
@@ -39,21 +38,20 @@ export class ProgramarViajePage implements OnInit {
       patente: ['', Validators.required],
     });
 
-    // Obtenemos el ID y email del usuario autenticado (conductor)
+    // Obtener datos del usuario autenticado
     this.afAuth.onAuthStateChanged((user) => {
       if (user) {
         this.conductorId = user.uid;
-        this.creadorEmail = user.email || ''; // Guardamos el correo del creador
+        this.creadorEmail = user.email || '';
 
-        // Obtenemos los datos del usuario del firestore
+        // Obtener datos adicionales del usuario
         this.firestore
           .collection('usuarios')
           .doc(user.uid)
           .get()
           .subscribe((doc) => {
-            const userData = doc.data() as Usuario;  // Usamos el tipo Usuario
+            const userData = doc.data() as Usuario;
             if (userData) {
-              // Concatenamos el nombre y apellido del conductor
               this.conductorNombreCompleto = `${userData.nombre} ${userData.apellido}`;
             }
           });
@@ -68,18 +66,22 @@ export class ProgramarViajePage implements OnInit {
 
     const viaje: Viaje = {
       ...this.viajeForm.value,
-      conductor: this.conductorNombreCompleto, // Guardamos el nombre completo del conductor aquí
-      creadorEmail: this.creadorEmail, // Guardamos el correo del creador
+      conductor: this.conductorNombreCompleto,
+      creadorEmail: this.creadorEmail,
       pasajeros: [],
       estado: 'disponible',
     };
 
-    // Guardamos el viaje en Firestore
+    // Guardar en Firestore
     this.firestore
       .collection('viajes')
       .add(viaje)
       .then(() => {
         console.log('Viaje programado exitosamente');
+        // Guardar en localStorage
+        let viajesProgramados = JSON.parse(localStorage.getItem('viajesProgramados') || '[]');
+        viajesProgramados.push(viaje);
+        localStorage.setItem('viajesProgramados', JSON.stringify(viajesProgramados));
         this.router.navigate(['/home']);
       })
       .catch((error) => {
