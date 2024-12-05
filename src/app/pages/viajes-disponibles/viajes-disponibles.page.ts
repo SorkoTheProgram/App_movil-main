@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { Viaje } from '../../models/models'; // Ruta al modelo de Viaje
+import { Viaje } from '../../models/models';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-viajes-disponibles',
@@ -16,7 +17,8 @@ export class ViajesDisponiblesPage implements OnInit {
 
   constructor(
     private firestore: AngularFirestore, 
-    private afAuth: AngularFireAuth
+    private afAuth: AngularFireAuth,
+    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -97,5 +99,13 @@ export class ViajesDisponiblesPage implements OnInit {
       this.loading = false; // Ocultar indicador de carga
       this.disablingButtons = false; // Reactivar botones
     }
+  }
+  verEnMapa(viaje: Viaje) {
+    // Guardar coordenadas del viaje en localStorage para luego usarlas en el mapa
+    const coordenadas = viaje.coordenadas;
+    localStorage.setItem('coordenadasViaje', JSON.stringify(coordenadas));
+
+    // Navegar a la página del mapa
+    this.router.navigate(['/mapa']);
   }
 }

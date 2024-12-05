@@ -17,4 +17,8 @@ export interface Viaje {
     pasajeros: string[];
     estado: 'disponible' | 'cancelado' | 'finalizado' | 'iniciado' | 'pendiente' | 'lleno';
     creadorEmail: string; // Correo del creador del viaje
+    coordenadas: {
+        latitud: number;
+        longitud: number;
+      };
 }
