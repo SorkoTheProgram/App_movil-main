@@ -42,7 +42,6 @@ export class ViajesDisponiblesPage implements OnInit {
 
   // Verificar si el usuario está intentando unirse a su propio viaje o ya está en el viaje
   isUserInTravel(viaje: Viaje) {
-    // Verifica si el usuario es el conductor o si ya está en el viaje
     return viaje.pasajeros.includes(this.userEmail) || viaje.creadorEmail === this.userEmail;
   }
 
@@ -56,7 +55,6 @@ export class ViajesDisponiblesPage implements OnInit {
     this.disablingButtons = true; // Desactivar temporalmente los botones
 
     try {
-      // Verificar si el usuario ya está en la lista de pasajeros
       const viajeRef = this.firestore.collection('viajes').doc(viaje.id);
       const viajeDoc = await viajeRef.get().toPromise();
       const viajeData = viajeDoc?.data() as Viaje;
@@ -67,7 +65,6 @@ export class ViajesDisponiblesPage implements OnInit {
         return;
       }
 
-      // Si el usuario es el conductor, no puede unirse
       if (viajeData.creadorEmail === this.userEmail) {
         console.log('No puedes unirte a tu propio viaje.');
         return;
@@ -77,6 +74,11 @@ export class ViajesDisponiblesPage implements OnInit {
       await viajeRef.update({
         pasajeros: [...viajeData.pasajeros, this.userEmail],
       });
+
+      // Guardar en localStorage
+      let viajesGuardados = JSON.parse(localStorage.getItem('viajesActuales') || '[]');
+      viajesGuardados.push(viaje);
+      localStorage.setItem('viajesActuales', JSON.stringify(viajesGuardados));
 
       console.log('Te has unido al viaje con éxito.');
     } catch (error) {

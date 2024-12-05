@@ -34,6 +34,8 @@ export class ViajeActualPage implements OnInit {
     if (!this.userEmail) return;
 
     this.loading = true;
+
+    // Intentar obtener los viajes desde Firebase
     this.firestore
       .collection('viajes', (ref) =>
         ref.where('pasajeros', 'array-contains', this.userEmail)
@@ -51,6 +53,9 @@ export class ViajeActualPage implements OnInit {
         (error) => {
           console.error('Error al cargar los viajes actuales:', error);
           this.loading = false;
+          // Si ocurre un error al obtener los datos desde Firebase, intentar obtenerlo del localStorage
+          const viajesGuardados = JSON.parse(localStorage.getItem('viajesActuales') || '[]');
+          this.viajesActuales = viajesGuardados;
         }
       );
   }
@@ -90,6 +95,13 @@ export class ViajeActualPage implements OnInit {
       })
       .then(() => {
         console.log(`Has cancelado tu participación en el viaje a ${viaje.destino}`);
+        // Eliminar el viaje de los viajes actuales almacenados en localStorage
+        const viajesGuardados = JSON.parse(localStorage.getItem('viajesActuales') || '[]');
+        const index = viajesGuardados.findIndex((v: Viaje) => v.id === viaje.id);
+        if (index > -1) {
+          viajesGuardados.splice(index, 1);
+        }
+        localStorage.setItem('viajesActuales', JSON.stringify(viajesGuardados));
         this.cargarViajesActuales();
       })
       .catch((error) => {
