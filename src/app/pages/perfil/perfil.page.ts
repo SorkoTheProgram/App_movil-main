@@ -5,7 +5,6 @@ import { ViajesService } from '../../services/viajes.service';
 import { Usuario, Viaje } from 'src/app/models/models';
 import { Router } from '@angular/router';
 
-
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.page.html',
@@ -14,7 +13,7 @@ import { Router } from '@angular/router';
 export class PerfilPage implements OnInit {
   usuario: Usuario | null = null;
   viajes: Viaje[] = [];
-  
+
   private authSvc = inject(AuthService);
   private utilsSvc = inject(UtilsService);
   private viajesSvc = inject(ViajesService);
@@ -47,9 +46,14 @@ export class PerfilPage implements OnInit {
     this.viajesSvc.getHistorialViajes(usuarioId).subscribe(
       (data: Viaje[]) => {
         this.viajes = data;
+        // Actualizar el localStorage
+        localStorage.setItem('viajesHistorial', JSON.stringify(this.viajes));
       },
       (error) => {
         console.error('Error al cargar el historial de viajes:', error);
+        // Si hay error, cargar desde el localStorage
+        const viajesGuardados = JSON.parse(localStorage.getItem('viajesHistorial') || '[]');
+        this.viajes = viajesGuardados;
       }
     );
   }
@@ -61,7 +65,8 @@ export class PerfilPage implements OnInit {
   cerrarSesion() {
     this.authSvc.cerrarSesion();
   }
+
   volverAlHome() {
-    this.router.navigate(['/home']);  // Usa el router para navegar
+    this.router.navigate(['/home']);
   }
 }

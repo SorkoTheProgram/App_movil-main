@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { UtilsService } from '../../services/utils.service';
-import { MenuController } from '@ionic/angular'; // Importación de MenuController
+import { MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-inicio-sesion',
@@ -10,54 +10,60 @@ import { MenuController } from '@ionic/angular'; // Importación de MenuControll
   styleUrls: ['./inicio-sesion.page.scss'],
 })
 export class InicioSesionPage implements OnInit {
-  // Constructor con inyección de servicios
   constructor(
     private utils: UtilsService,
     private authSvc: AuthService,
-    private menuCtrl: MenuController // Inyección de MenuController
+    private menuCtrl: MenuController
   ) {}
 
-  // Formulario de acceso con validaciones
   formAcceso = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(6)]),
   });
 
-  // Método requerido por la interfaz OnInit
   ngOnInit() {}
 
   ionViewWillEnter() {
-    // Desactiva el menú cada vez que la página se muestra
     this.menuCtrl.enable(false);
   }
 
   ionViewWillLeave() {
-    // Activa el menú al salir de la página de inicio de sesión
     this.menuCtrl.enable(true);
   }
 
-  // Método para iniciar sesión
   async acceder() {
     const formValues = this.formAcceso.value;
     const loading = await this.utils.presentarCargando('Verificando...');
     loading.present();
 
     try {
-      // Intento de inicio de sesión
+      // Intento de inicio de sesión online
       const user = await this.authSvc.iniciarSesion(formValues.email!, formValues.password!);
       if (user) {
+        // Guardar las credenciales en localStorage
+        localStorage.setItem('userCredentials', JSON.stringify({
+          email: formValues.email,
+          password: formValues.password,
+        }));
         this.utils.navegarAlInicio('/home');
       }
     } catch (error) {
-      // Manejo de errores
-      this.utils.mostrarToast({
-        icono: 'alert-circle',
-        mensaje: 'Error: usuario o contraseña incorrectos.',
-        color: 'danger',
-        duracion: 3000
-      });
+      // Intento de inicio de sesión offline
+      const storedCredentials = JSON.parse(localStorage.getItem('userCredentials') || '{}');
+      if (
+        storedCredentials.email === formValues.email &&
+        storedCredentials.password === formValues.password
+      ) {
+        this.utils.navegarAlInicio('/home');
+      } else {
+        this.utils.mostrarToast({
+          icono: 'alert-circle',
+          mensaje: 'Error: usuario o contraseña incorrectos.',
+          color: 'danger',
+          duracion: 3000,
+        });
+      }
     } finally {
-      // Cierre del loading
       loading.dismiss();
     }
   }

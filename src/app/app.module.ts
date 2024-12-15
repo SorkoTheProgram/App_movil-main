@@ -10,10 +10,12 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { firebaseConfig } from '../environments/firebaseconfig';
 import { environment } from '../environments/environment';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
-
+import { ReactiveFormsModule } from '@angular/forms';
+// Eliminar la declaración de PagoPage de aquí
+// import { PagoPage } from './pago/pago.page'; 
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent], // Solo AppComponent aquí
   imports: [
     BrowserModule, 
     IonicModule.forRoot(), 
@@ -22,6 +24,7 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
     AngularFireAuthModule, 
     AngularFirestoreModule,
     AngularFireStorageModule,
+    ReactiveFormsModule,
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

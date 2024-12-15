@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-
+import { ViajesDisponiblesPageRoutingModule } from './viajes-disponibles-routing.module';
 import { ViajesDisponiblesPage } from './viajes-disponibles.page';
 
 const routes: Routes = [
@@ -16,7 +16,8 @@ const routes: Routes = [
   imports: [
     CommonModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    ViajesDisponiblesPageRoutingModule
   ],
   declarations: [ViajesDisponiblesPage]
 })

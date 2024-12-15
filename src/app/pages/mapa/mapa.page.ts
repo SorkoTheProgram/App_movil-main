@@ -1,7 +1,8 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import mapboxgl from 'mapbox-gl';
+import { Router } from '@angular/router';  // Importar el Router para redirigir
 import { MapboxService } from 'src/app/services/mapbox.service';
-import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-map',
@@ -19,7 +20,6 @@ export class MapaPage implements OnInit, AfterViewInit {
   ngOnInit() {}
 
   ngAfterViewInit() {
-    // Llamar al método buildMap después de que la vista haya sido cargada
     this.inicializarMapa();
   }
 

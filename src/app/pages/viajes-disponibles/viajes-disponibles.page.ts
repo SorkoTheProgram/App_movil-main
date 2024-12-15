@@ -12,8 +12,8 @@ import { Router } from '@angular/router';
 export class ViajesDisponiblesPage implements OnInit {
   viajes: Viaje[] = [];
   userEmail: string | null = null;
-  loading: boolean = false; // Bandera para controlar el indicador de carga
-  disablingButtons: boolean = false; // Bandera para desactivar temporalmente los botones
+  loading: boolean = false;
+  disablingButtons: boolean = false;
 
   constructor(
     private firestore: AngularFirestore, 
@@ -22,27 +22,24 @@ export class ViajesDisponiblesPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Obtener el email del usuario autenticado
     this.afAuth.currentUser.then((user) => {
       if (user) {
         this.userEmail = user.email;
       }
     });
 
-    // Cargar los viajes disponibles desde Firebase
     this.firestore
       .collection('viajes', (ref) => ref.where('estado', '==', 'disponible'))
       .snapshotChanges()
       .subscribe((data) => {
         this.viajes = data.map((e) => {
           const viaje = e.payload.doc.data() as Viaje;
-          viaje.id = e.payload.doc.id; // Obtener el ID del viaje
+          viaje.id = e.payload.doc.id;
           return viaje;
         });
       });
   }
 
-  // Verificar si el usuario está intentando unirse a su propio viaje o ya está en el viaje
   isUserInTravel(viaje: Viaje) {
     return viaje.pasajeros.includes(this.userEmail) || viaje.creadorEmail === this.userEmail;
   }
@@ -53,15 +50,14 @@ export class ViajesDisponiblesPage implements OnInit {
       return;
     }
 
-    this.loading = true; // Mostrar indicador de carga
-    this.disablingButtons = true; // Desactivar temporalmente los botones
+    this.loading = true;
+    this.disablingButtons = true;
 
     try {
       const viajeRef = this.firestore.collection('viajes').doc(viaje.id);
       const viajeDoc = await viajeRef.get().toPromise();
       const viajeData = viajeDoc?.data() as Viaje;
 
-      // Verificar si el usuario ya está en el viaje o es el creador
       if (viajeData.pasajeros.includes(this.userEmail)) {
         console.log('Ya estás unido a este viaje.');
         return;
@@ -72,23 +68,41 @@ export class ViajesDisponiblesPage implements OnInit {
         return;
       }
 
-      // Agregar al usuario a la lista de pasajeros
+      if (viajeData.asientos <= 0) {
+        console.log('El viaje está lleno.');
+        alert('No hay asientos disponibles en este viaje.');
+        return;
+      }
+
       await viajeRef.update({
         pasajeros: [...viajeData.pasajeros, this.userEmail],
+        asientos: viajeData.asientos - 1,
       });
 
-      // Guardar en localStorage
-      let viajesGuardados = JSON.parse(localStorage.getItem('viajesActuales') || '[]');
-      viajesGuardados.push(viaje);
-      localStorage.setItem('viajesActuales', JSON.stringify(viajesGuardados));
-
       console.log('Te has unido al viaje con éxito.');
+
+      // Guardar en localStorage el viaje para llevarlo a la página de pago
+      localStorage.setItem('viajeSeleccionado', JSON.stringify(viaje));
+
+      // Redirigir a la página de pago
+      this.router.navigate(['/pago']);
     } catch (error) {
       console.error('Error al unirse al viaje:', error);
     } finally {
-      this.loading = false; // Ocultar indicador de carga
-      this.disablingButtons = false; // Reactivar botones
+      this.loading = false;
+      this.disablingButtons = false;
     }
   }
-  
+
+  verEnMapa(viaje: Viaje) {
+    const coordenadas = viaje.coordenadas;
+    localStorage.setItem('coordenadasViaje', JSON.stringify(coordenadas));
+    this.router.navigate(['/mapa']);
+  }
+
+  irAPago(viaje: Viaje) {
+    // Este método redirige a la página de pago y guarda el viaje seleccionado en localStorage
+    localStorage.setItem('viajeSeleccionado', JSON.stringify(viaje));
+    this.router.navigate(['/pago']);
+  }
 }

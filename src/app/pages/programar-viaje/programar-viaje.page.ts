@@ -39,7 +39,7 @@ export class ProgramarViajePage implements OnInit {
   ngOnInit() {
     this.minFecha = new Date().toISOString();
 
-    // Configuramos el formulario reactivo con validaciones
+    // Configurar formulario reactivo
     this.viajeForm = this.fb.group({
       inicio: ['', Validators.required],
       fin: ['', Validators.required],
@@ -51,12 +51,13 @@ export class ProgramarViajePage implements OnInit {
     });
 
     // Obtener el ID y email del usuario autenticado (conductor)
+    // Obtener datos del usuario autenticado
     this.afAuth.onAuthStateChanged((user) => {
       if (user) {
         this.conductorId = user.uid;
-        this.creadorEmail = user.email || ''; // Guardamos el correo del creador
+        this.creadorEmail = user.email || '';
 
-        // Obtenemos los datos del usuario del firestore
+        // Obtener datos adicionales del usuario
         this.firestore
           .collection('usuarios')
           .doc(user.uid)
@@ -162,12 +163,16 @@ export class ProgramarViajePage implements OnInit {
       coordenadas: this.coordenadas,
     };
 
-    // Guardamos el viaje en Firestore
+    // Guardar en Firestore
     this.firestore
       .collection('viajes')
       .add(viaje)
       .then(() => {
         console.log('Viaje programado exitosamente');
+        // Guardar en localStorage
+        let viajesProgramados = JSON.parse(localStorage.getItem('viajesProgramados') || '[]');
+        viajesProgramados.push(viaje);
+        localStorage.setItem('viajesProgramados', JSON.stringify(viajesProgramados));
         this.router.navigate(['/home']);
       })
       .catch((error) => {
