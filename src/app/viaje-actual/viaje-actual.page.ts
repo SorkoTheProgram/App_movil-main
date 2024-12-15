@@ -29,11 +29,11 @@ export class ViajeActualPage implements OnInit {
     });
   }
 
-  // Cargar los viajes en los que el usuario está como pasajero
   cargarViajesActuales() {
     if (!this.userEmail) return;
 
     this.loading = true;
+
     this.firestore
       .collection('viajes', (ref) =>
         ref.where('pasajeros', 'array-contains', this.userEmail)
@@ -41,21 +41,39 @@ export class ViajeActualPage implements OnInit {
       .snapshotChanges()
       .subscribe(
         (data) => {
-          this.viajesActuales = data.map((e) => {
+          const viajes = data.map((e) => {
             const viaje = e.payload.doc.data() as Viaje;
             viaje.id = e.payload.doc.id;
             return viaje;
           });
+
+          // Actualizamos los datos locales
+          this.viajesActuales = viajes;
           this.loading = false;
+
+          // Guardamos en localStorage
+          localStorage.setItem(
+            'viajesActuales',
+            JSON.stringify(this.viajesActuales)
+          );
         },
         (error) => {
           console.error('Error al cargar los viajes actuales:', error);
+
+          // Si hay error, intentamos cargar desde localStorage
+          const datosGuardados = localStorage.getItem('viajesActuales');
+          if (datosGuardados) {
+            this.viajesActuales = JSON.parse(datosGuardados);
+            console.log('Cargado desde localStorage debido a error en el servidor.');
+          } else {
+            this.viajesActuales = [];
+            console.log('No hay datos guardados en localStorage.');
+          }
           this.loading = false;
         }
       );
   }
 
-  // Confirmar cancelación de un viaje
   async confirmarCancelacion(viaje: Viaje) {
     const alert = await this.alertController.create({
       header: 'Cancelar Viaje',
@@ -77,29 +95,35 @@ export class ViajeActualPage implements OnInit {
     await alert.present();
   }
 
-  // Cancelar la participación en un viaje
   async cancelarViaje(viaje: Viaje) {
     if (!this.userEmail) return;
 
     this.loading = true;
 
     const viajeRef = this.firestore.collection('viajes').doc(viaje.id);
-    // Filtramos a los pasajeros para eliminar al usuario
     const pasajerosActualizados = viaje.pasajeros.filter(
       (email) => email !== this.userEmail
     );
-
-    // Sumar un asiento disponible al cancelar
     const asientosDisponiblesActualizados = viaje.asientos + 1;
 
     try {
       await viajeRef.update({
         pasajeros: pasajerosActualizados,
-        asientos: asientosDisponiblesActualizados, // Sumamos un asiento
+        asientos: asientosDisponiblesActualizados,
       });
 
       console.log(`Has cancelado tu participación en el viaje a ${viaje.destino}`);
-      this.cargarViajesActuales(); // Recargamos los viajes actuales
+
+      // Actualizamos los datos locales
+      this.viajesActuales = this.viajesActuales.filter((v) => v.id !== viaje.id);
+
+      // Guardamos en localStorage
+      localStorage.setItem(
+        'viajesActuales',
+        JSON.stringify(this.viajesActuales)
+      );
+
+      this.cargarViajesActuales();
     } catch (error) {
       console.error('Error al cancelar el viaje:', error);
     } finally {
