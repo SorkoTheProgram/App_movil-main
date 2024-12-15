@@ -11,11 +11,13 @@
   <ion-list>
     <ion-item *ngFor="let viaje of viajesActuales">
       <ion-label>
-        <h2>{{ viaje.destino }}</h2>
-        <p>{{ viaje.comunaViaje }} - {{ viaje.fecha | date: 'dd/MM/yyyy' }}</p>
+        <h2>{{ viaje.inicio }}</h2>
+        <p>{{ viaje.destino }} - {{ viaje.fecha | date: 'dd/MM/yyyy' }}</p>
         <p>Conductor: {{ viaje.conductor }}</p>
       </ion-label>
       <ion-button color="danger" (click)="confirmarCancelacion(viaje)">Cancelar</ion-button>
+      <!-- Agregar botón para ver en el mapa -->
+      <ion-button color="primary" (click)="verEnMapa(viaje)">Ver en el mapa</ion-button>
     </ion-item>
   </ion-list>
 

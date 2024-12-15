@@ -17,7 +17,8 @@ export class ViajeEnCursoPage implements OnInit {
   constructor(
     private route: ActivatedRoute,  // Para acceder a los parámetros de la URL
     private firestore: AngularFirestore,  // Para interactuar con Firestore
-    private navCtrl: NavController  // Para la navegación
+    private navCtrl: NavController,  // Para la navegación
+    private router: Router  // Para redirigir a la página de mapa
   ) {}
 
   ngOnInit() {
@@ -48,5 +49,19 @@ export class ViajeEnCursoPage implements OnInit {
   // Función para volver al home
   volverHome() {
     this.navCtrl.navigateBack('/home');  // Redirige a la página de inicio
+  }
+
+  // Función para ver el viaje en el mapa
+  verEnMapa() {
+    if (this.viaje) {
+      // Guardamos las coordenadas en localStorage
+      localStorage.setItem('coordenadasViaje', JSON.stringify({
+        latitud: this.viaje.coordenadas.latitud,
+        longitud: this.viaje.coordenadas.longitud
+      }));
+
+      // Redirige a la página de mapa
+      this.router.navigate(['/mapa']);
+    }
   }
 }

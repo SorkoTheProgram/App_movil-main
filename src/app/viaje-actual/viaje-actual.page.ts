@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AlertController } from '@ionic/angular';
 import { Viaje } from 'src/app/models/models';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-viaje-actual',
@@ -17,7 +18,8 @@ export class ViajeActualPage implements OnInit {
   constructor(
     private firestore: AngularFirestore,
     private afAuth: AngularFireAuth,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -29,13 +31,11 @@ export class ViajeActualPage implements OnInit {
     });
   }
 
-  // Cargar los viajes en los que el usuario está como pasajero
   cargarViajesActuales() {
     if (!this.userEmail) return;
 
     this.loading = true;
 
-    // Intentar obtener los viajes desde Firebase
     this.firestore
       .collection('viajes', (ref) =>
         ref.where('pasajeros', 'array-contains', this.userEmail)
@@ -53,14 +53,12 @@ export class ViajeActualPage implements OnInit {
         (error) => {
           console.error('Error al cargar los viajes actuales:', error);
           this.loading = false;
-          // Si ocurre un error al obtener los datos desde Firebase, intentar obtenerlo del localStorage
           const viajesGuardados = JSON.parse(localStorage.getItem('viajesActuales') || '[]');
           this.viajesActuales = viajesGuardados;
         }
       );
   }
 
-  // Confirmar cancelación de un viaje
   async confirmarCancelacion(viaje: Viaje) {
     const alert = await this.alertController.create({
       header: 'Cancelar Viaje',
@@ -82,7 +80,6 @@ export class ViajeActualPage implements OnInit {
     await alert.present();
   }
 
-  // Cancelar la participación en un viaje
   cancelarViaje(viaje: Viaje) {
     if (!this.userEmail) return;
 
@@ -95,7 +92,6 @@ export class ViajeActualPage implements OnInit {
       })
       .then(() => {
         console.log(`Has cancelado tu participación en el viaje a ${viaje.destino}`);
-        // Eliminar el viaje de los viajes actuales almacenados en localStorage
         const viajesGuardados = JSON.parse(localStorage.getItem('viajesActuales') || '[]');
         const index = viajesGuardados.findIndex((v: Viaje) => v.id === viaje.id);
         if (index > -1) {
@@ -110,5 +106,21 @@ export class ViajeActualPage implements OnInit {
       .finally(() => {
         this.loading = false;
       });
+  }
+
+  // Nueva función para ver el viaje en el mapa
+  verEnMapa(viaje: Viaje) {
+    console.log('Coordenadas del viaje:', viaje.coordenadas);
+    const coordenadasViaje = {
+      latitud: viaje.coordenadas.latitud,  // Acceder a latitud
+      longitud: viaje.coordenadas.longitud, // Acceder a longitud
+    };
+  
+    if (coordenadasViaje.latitud && coordenadasViaje.longitud) {
+      localStorage.setItem('coordenadasViaje', JSON.stringify(coordenadasViaje));
+      this.router.navigate(['/mapa']);  // <-- Aquí rediriges a la página del mapa
+    } else {
+      console.error('Coordenadas no válidas');
+    }
   }
 }

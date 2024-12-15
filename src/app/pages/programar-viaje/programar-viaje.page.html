@@ -11,23 +11,39 @@
 
 <ion-content class="ion-padding">
   <form [formGroup]="viajeForm" (ngSubmit)="programarViaje()">
-    <!-- Destino -->
+    <!-- Dirección de inicio -->
+    <ion-item>
+      <ion-label position="floating">Punto de partida</ion-label>
+      <ion-input
+        formControlName="inicio"
+        placeholder="Ingrese su punto de partida..."
+        (ionInput)="onSearch($event, 'inicio')"
+        [value]="direccionInicio"
+        required
+      ></ion-input>
+    </ion-item>
+    <ion-list *ngIf="searchResultsInicio.length > 0">
+      <ion-item *ngFor="let result of searchResultsInicio" (click)="onSelectResult(result, 'inicio')">
+        {{ result.place_name }}
+      </ion-item>
+    </ion-list>
+
+    <!-- Dirección de fin -->
     <ion-item>
       <ion-label position="floating">Destino</ion-label>
-      <ion-input formControlName="destino" required></ion-input>
+      <ion-input
+        formControlName="fin"
+        placeholder="Ingrese su destino..."
+        (ionInput)="onSearch($event, 'fin')"
+        [value]="direccionFin"
+        required
+      ></ion-input>
     </ion-item>
-    <div *ngIf="viajeForm.get('destino')?.invalid && viajeForm.get('destino')?.touched" class="error">
-      El destino es obligatorio.
-    </div>
-
-    <!-- Comuna de Viaje -->
-    <ion-item>
-      <ion-label position="floating">Comuna de Viaje</ion-label>
-      <ion-input formControlName="comunaViaje" required></ion-input>
-    </ion-item>
-    <div *ngIf="viajeForm.get('comunaViaje')?.invalid && viajeForm.get('comunaViaje')?.touched" class="error">
-      La comuna es obligatoria.
-    </div>
+    <ion-list *ngIf="searchResultsFin.length > 0">
+      <ion-item *ngFor="let result of searchResultsFin" (click)="onSelectResult(result, 'fin')">
+        {{ result.place_name }}
+      </ion-item>
+    </ion-list>
 
     <!-- Fecha -->
     <ion-item>
@@ -48,38 +64,27 @@
       <ion-label position="floating">Precio por Persona</ion-label>
       <ion-input formControlName="precio" type="number" required></ion-input>
     </ion-item>
-    <div *ngIf="viajeForm.get('precio')?.invalid && viajeForm.get('precio')?.touched" class="error">
-      Ingresa un precio válido.
-    </div>
+
     <!-- Asientos -->
     <ion-item>
       <ion-label position="floating">Asientos Disponibles</ion-label>
       <ion-input formControlName="asientos" type="number" required></ion-input>
     </ion-item>
-    <div *ngIf="viajeForm.get('asientos')?.invalid && viajeForm.get('asientos')?.touched" class="error">
-      Ingresa un número válido de asientos.
-    </div>
 
     <!-- Modelo -->
     <ion-item>
       <ion-label position="floating">Modelo del Auto</ion-label>
       <ion-input formControlName="modelo" required></ion-input>
     </ion-item>
-    <div *ngIf="viajeForm.get('modelo')?.invalid && viajeForm.get('modelo')?.touched" class="error">
-      El modelo del auto es obligatorio.
-    </div>
 
     <!-- Patente -->
     <ion-item>
       <ion-label position="floating">Patente del Auto</ion-label>
       <ion-input formControlName="patente" required></ion-input>
     </ion-item>
-    <div *ngIf="viajeForm.get('patente')?.invalid && viajeForm.get('patente')?.touched" class="error">
-      La patente del auto es obligatoria.
-    </div>
 
     <!-- Botón -->
-    <ion-button expand="full" type="submit" [disabled]="viajeForm.invalid">
+    <ion-button expand="full" type="submit" >
       Programar Viaje
     </ion-button>
   </form>

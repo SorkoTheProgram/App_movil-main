@@ -13,6 +13,8 @@
     <ion-item *ngFor="let viaje of viajes">
       <ion-label>
         <h2>{{ viaje.destino }}</h2>
+        <h2>{{ viaje.inicio }}</h2>
+        
         <p>{{ viaje.comunaViaje }} - {{ viaje.fecha | date }}</p>
         <p>Precio: ${{ viaje.precio }}</p>
         
@@ -26,9 +28,7 @@
           Solicitar Viaje
         </ion-button>
 
-        <ion-button (click)="verEnMapa(viaje)">
-          Ver en el Mapa
-        </ion-button>
+        
       </ion-label>
     </ion-item>
   </ion-list>

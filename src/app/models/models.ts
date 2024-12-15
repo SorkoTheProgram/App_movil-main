@@ -3,11 +3,16 @@ export interface Usuario {
     nombre: string;
     apellido: string;
     password: string;
+    coordenadas: {
+        latitud: number;
+        longitud: number;
+      };
 }
 export interface Viaje {
     id?: string;
     destino: string;
     comunaViaje: string;
+    inicio: string;
     fecha: Date;
     precio: number;
     asientos: number;

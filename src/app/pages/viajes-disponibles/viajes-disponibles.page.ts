@@ -90,12 +90,5 @@ export class ViajesDisponiblesPage implements OnInit {
       this.disablingButtons = false; // Reactivar botones
     }
   }
-  verEnMapa(viaje: Viaje) {
-    // Guardar coordenadas del viaje en localStorage para luego usarlas en el mapa
-    const coordenadas = viaje.coordenadas;
-    localStorage.setItem('coordenadasViaje', JSON.stringify(coordenadas));
-
-    // Navegar a la página del mapa
-    this.router.navigate(['/mapa']);
-  }
+  
 }
