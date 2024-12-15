@@ -12,9 +12,8 @@
     <ion-item *ngFor="let viaje of viajes">
       <ion-label>
         <h2>{{ viaje.destino }}</h2>
-        <h2>{{ viaje.inicio }}</h2>
         
-        <p>{{ viaje.comunaViaje }} - {{ viaje.fecha | date }}</p>
+        <p>{{ viaje.fecha | date }}</p>
         <p>{{ viaje.conductor }}</p>
         <p>Precio: ${{ viaje.precio }}</p>
         <p><strong>Asientos disponibles:</strong> {{ viaje.asientos }}</p>

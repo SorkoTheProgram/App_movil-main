@@ -13,7 +13,7 @@
     <ion-item *ngFor="let viaje of viajes">
       <ion-label>
         <h2>{{ viaje.destino }}</h2>
-        <p>{{ viaje.comunaViaje }} - {{ viaje.fecha | date }}</p>
+        <p>{{ viaje.fecha | date }}</p>
         <p>Precio: ${{ viaje.precio }}</p>
         <ion-button routerLink="/viaje-detalle/{{ viaje.id }}">Ver Detalles</ion-button>
         <ion-button color="danger" (click)="confirmarCancelacion(viaje)">Cancelar</ion-button>
