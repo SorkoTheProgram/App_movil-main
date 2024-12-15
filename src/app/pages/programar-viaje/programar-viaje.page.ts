@@ -91,19 +91,39 @@ export class ProgramarViajePage implements OnInit {
   }
 
   buscarDireccionMapbox(query: string, tipo: string) {
-    const mapboxUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?access_token=pk.eyJ1IjoiY3Jpc3RpYW5kdW9jIiwiYSI6ImNtNGFkZThpODA2dnYycXB0YXVja3oxYmMifQ.SKCcsYUVVVDkgXjf6MjdTA`;
-
+    const accessToken = 'pk.eyJ1IjoiY3Jpc3RpYW5kdW9jIiwiYSI6ImNtNGFkZThpODA2dnYycXB0YXVja3oxYmMifQ.SKCcsYUVVVDkgXjf6MjdTA';
+    const baseUrl = 'https://api.mapbox.com/geocoding/v5/mapbox.places';
+    const encodedQuery = encodeURIComponent(query);
+  
+    // Parámetros: sin 'postcode', restringiendo a Chile
+    // y agregando 'poi' para lugares como "Duoc", "Mall Trebol", etc.
+    const params = [
+      `access_token=${accessToken}`,
+      'country=cl',
+      'types=address,place,poi,locality,region,district', // SIN 'postcode'
+      'language=es',
+      'limit=5',
+      'autocomplete=true'
+    ].join('&');
+  
+    const mapboxUrl = `${baseUrl}/${encodedQuery}.json?${params}`;
+  
     fetch(mapboxUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        const results = data.features;
+      .then(response => response.json())
+      .then(data => {
+        // data.features puede traer 'postcode' raramente.
+        let results = data.features || [];
+  
+        // FILTRO MANUAL: excluir cualquier feature con "postcode" en place_type
+        results = results.filter(feature => !feature.place_type.includes('postcode'));
+  
         if (tipo === 'inicio') {
           this.searchResultsInicio = results;
         } else if (tipo === 'destino') {
           this.searchResultsDestino = results;
         }
       })
-      .catch((error) => console.error('Error al obtener la dirección de Mapbox:', error));
+      .catch(error => console.error('Error al obtener la dirección de Mapbox:', error));
   }
 
   onSelectResult(result: any, tipo: string) {
