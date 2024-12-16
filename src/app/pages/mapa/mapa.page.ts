@@ -71,6 +71,13 @@ export class MapaPage implements OnInit, AfterViewInit {
     }
   }
 
+  ionViewDidEnter() {
+    
+    setTimeout(() => {
+      this.map.resize();
+    }, 200);
+  }
+
   // Trazar la ruta entre la ubicación del usuario y el destino
   trazarRuta() {
     if (this.userLocation && this.destino) {
