@@ -27,8 +27,28 @@ export class ViajeActualPage implements OnInit {
       if (user) {
         this.userEmail = user.email;
         this.cargarViajesActuales();
+      } else {
+        // Modo offline: Obtener el email desde localStorage
+        const storedCredentials = JSON.parse(localStorage.getItem('userCredentials') || '{}');
+        if (storedCredentials.email) {
+          this.userEmail = storedCredentials.email;
+          this.cargarViajesActualesOffline();
+        } else {
+          console.error('No se encontraron credenciales offline.');
+        }
       }
     });
+  }
+  
+  cargarViajesActualesOffline() {
+    const datosGuardados = localStorage.getItem('viajesActuales');
+    if (datosGuardados) {
+      this.viajesActuales = JSON.parse(datosGuardados);
+      console.log('Viajes cargados offline desde localStorage:', this.viajesActuales);
+    } else {
+      console.log('No hay viajes guardados en localStorage.');
+      this.viajesActuales = [];
+    }
   }
 
   cargarViajesActuales() {
@@ -51,13 +71,15 @@ export class ViajeActualPage implements OnInit {
 
           // Actualizamos los datos locales
           this.viajesActuales = viajes;
-          this.loading = false;
+          console.log('Viajes cargados desde Firestore:', this.viajesActuales);
 
           // Guardamos en localStorage
           localStorage.setItem(
             'viajesActuales',
             JSON.stringify(this.viajesActuales)
           );
+          console.log('Viajes guardados en localStorage.');
+          this.loading = false;
         },
         (error) => {
           console.error('Error al cargar los viajes actuales:', error);
@@ -66,14 +88,12 @@ export class ViajeActualPage implements OnInit {
           const datosGuardados = localStorage.getItem('viajesActuales');
           if (datosGuardados) {
             this.viajesActuales = JSON.parse(datosGuardados);
-            console.log('Cargado desde localStorage debido a error en el servidor.');
+            console.log('Viajes cargados desde localStorage debido a error en el servidor:', this.viajesActuales);
           } else {
             this.viajesActuales = [];
             console.log('No hay datos guardados en localStorage.');
           }
           this.loading = false;
-          const viajesGuardados = JSON.parse(localStorage.getItem('viajesActuales') || '[]');
-          this.viajesActuales = viajesGuardados;
         }
       );
   }
@@ -117,6 +137,7 @@ export class ViajeActualPage implements OnInit {
           viajesGuardados.splice(index, 1);
         }
         localStorage.setItem('viajesActuales', JSON.stringify(viajesGuardados));
+        console.log('Viaje actualizado en localStorage tras cancelación:', viajesGuardados);
         this.cargarViajesActuales();
       })
       .catch((error) => {
@@ -131,13 +152,14 @@ export class ViajeActualPage implements OnInit {
   verEnMapa(viaje: Viaje) {
     console.log('Coordenadas del viaje:', viaje.coordenadas);
     const coordenadasViaje = {
-      latitud: viaje.coordenadas.latitud,  // Acceder a latitud
-      longitud: viaje.coordenadas.longitud, // Acceder a longitud
+      latitud: viaje.coordenadas.latitud,
+      longitud: viaje.coordenadas.longitud,
     };
-  
+
     if (coordenadasViaje.latitud && coordenadasViaje.longitud) {
       localStorage.setItem('coordenadasViaje', JSON.stringify(coordenadasViaje));
-      this.router.navigate(['/mapa']);  // <-- Aquí rediriges a la página del mapa
+      console.log('Coordenadas guardadas en localStorage:', coordenadasViaje);
+      this.router.navigate(['/mapa']);
     } else {
       console.error('Coordenadas no válidas');
     }

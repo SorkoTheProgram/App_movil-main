@@ -32,37 +32,45 @@ export class InicioSesionPage implements OnInit {
   }
 
   async acceder() {
-    const formValues = this.formAcceso.value;
+    const { email, password } = this.formAcceso.value; // Obtén los valores del formulario
     const loading = await this.utils.presentarCargando('Verificando...');
     loading.present();
 
     try {
       // Intento de inicio de sesión online
-      const user = await this.authSvc.iniciarSesion(formValues.email!, formValues.password!);
+      const user = await this.authSvc.iniciarSesion(email!, password!);
       if (user) {
-        // Guardar las credenciales en localStorage
-        localStorage.setItem('userCredentials', JSON.stringify({
-          email: formValues.email,
-          password: formValues.password,
-        }));
+        console.log('Inicio de sesión exitoso. Guardando credenciales en localStorage.');
+
+        // Guardar las credenciales directamente en localStorage
+        localStorage.setItem(
+          'userCredentials',
+          JSON.stringify({ email, password })
+        );
+
         this.utils.navegarAlInicio('/home');
       }
     } catch (error) {
-      // Intento de inicio de sesión offline
+      console.error('Error al iniciar sesión online:', error);
+
+      // Intentar autenticación offline
       const storedCredentials = JSON.parse(localStorage.getItem('userCredentials') || '{}');
       if (
-        storedCredentials.email === formValues.email &&
-        storedCredentials.password === formValues.password
+        storedCredentials.email === email &&
+        storedCredentials.password === password
       ) {
+        console.log('Inicio de sesión offline exitoso.');
         this.utils.navegarAlInicio('/home');
-      } else {
-        this.utils.mostrarToast({
-          icono: 'alert-circle',
-          mensaje: 'Error: usuario o contraseña incorrectos.',
-          color: 'danger',
-          duracion: 3000,
-        });
+        return;
       }
+
+      // Mostrar error si las credenciales no coinciden
+      this.utils.mostrarToast({
+        icono: 'alert-circle',
+        mensaje: 'Error: usuario o contraseña incorrectos.',
+        color: 'danger',
+        duracion: 3000,
+      });
     } finally {
       loading.dismiss();
     }
